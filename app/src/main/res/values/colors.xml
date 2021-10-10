@@ -8,5 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="login_highlight_font">#117300</color>
-    <color name="login_highlight_title">#CCCC1D</color>
+    <color name="login_focused_icons">#117300</color>
 </resources>
