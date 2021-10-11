@@ -11,4 +11,16 @@
     <string name="textview_not_account_es">¿No tienes cuenta?</string>
     <string name="textview_sign_in_es">Registrate</string>
 
+    <!--Sing In screen ES-->
+    <!-- Buttons-->
+    <string name="button_sing_in_es">Registrarse</string>
+    <!-- Textviews-->
+    <string name="textview_create_accnt_es">Crear cuenta</string>
+    <string name="textview_join_us_es">Unete a nosotros</string>
+    <!--Hints-->
+    <string name="hint_name_es">Nombre</string>
+    <string name="hint_email_es">Correo electronico</string>
+    <string name="hint_pass_es">Contraseña</string>
+    <string name="hint_re_pass_es">Repetir contraseña</string>
+
 </resources>
