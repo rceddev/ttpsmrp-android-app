@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">ttpsmrpapp</string>
+
+    <!--Login screen ES-->
+    <!-- Buttons-->
+    <string name="button_login">Iniciar sesion</string>
+    <!-- Textviews-->
+    <string name="textview_login_es">Inicia sesion para continuar</string>
+    <string name="textview_forgot_pass_es">Olvide mi contraseña</string>
+    <string name="textview_welcome_es">Bienvenido</string>
+    <string name="textview_not_account_es">¿No tienes cuenta?</string>
+    <string name="textview_sign_in_es">Registrate</string>
+
+    <!--Sing In screen ES-->
+    <!-- Buttons-->
+    <string name="button_sing_in_es">Registrarse</string>
+    <!-- Textviews-->
+    <string name="textview_create_accnt_es">Crear cuenta</string>
+    <string name="textview_join_us_es">Unete a nosotros</string>
+    <!--Hints-->
+    <string name="hint_name_es">Nombre</string>
+    <string name="hint_email_es">Correo electronico</string>
+    <string name="hint_pass_es">Contraseña</string>
+    <string name="hint_re_pass_es">Repetir contraseña</string>
+
 </resources>
