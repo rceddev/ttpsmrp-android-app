@@ -4,37 +4,28 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.CursorLoader;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
-import com.tt.ttpsmrpapp.network.api.body.MessageResponse;
-
-import org.w3c.dom.Text;
+import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -85,6 +76,8 @@ public class SignIn extends AppCompatActivity {
         this.userPass = (EditText)findViewById(R.id.edit_text_user_password);
         this.userRepeatPass = (EditText)findViewById(R.id.edit_text_user_repeat_pass);
 
+        SignInViewModel model = new ViewModelProvider(this).get(SignInViewModel.class);
+
         imagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,73 +85,14 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
-
-
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), userName.getText().toString());
-                RequestBody email = RequestBody.create(MediaType.parse("text/plain"), userEmail.getText().toString());
-                RequestBody pass = RequestBody.create(MediaType.parse("text/plain"), userPass.getText().toString());
-
-                MultipartBody.Part image = null;
-                byte[] imageByteArray = null;
-
-                if (imageUri != null) {
-
-                    try {
-                        InputStream is = getContentResolver().openInputStream(imageUri);
-                        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
-
-                        int buffSize = 1024;
-                        byte[] buff = new byte[buffSize];
-                        int len = 0;
-
-                        while ((len = is.read(buff)) != -1) {
-                            byteBuff.write(buff, 0, len);
-                        }
-
-                        imageByteArray = byteBuff.toByteArray();
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (!imageByteArray.equals(null)) {
-                        RequestBody requestImage =
-                                RequestBody.create(
-                                        MediaType.parse("image/*"), imageByteArray);
-                        image = MultipartBody.Part.createFormData("url", "profile.jpg", requestImage);
-                    }else
-                        Log.e("IMAGE_BYTE_ARRAY:" , "null");
-
-
-
-                }else
-                    Toast.makeText(SignIn.this, "imageUriNull", Toast.LENGTH_SHORT).show();
-
-                ApiService apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
-                Call<MessageResponse> call = apiService.registerUser(email, pass, name, image);
-
-                call.enqueue(new Callback<MessageResponse>() {
-                    @Override
-                    public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                        if (response.isSuccessful()){
-                            if (response.body() != null && response.body() instanceof MessageResponse)
-                            showSuccessUserRegisteredMessage();
-                        }
-                        else{
-                            Log.e("Register Request error", "The response was not succesfull");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageResponse> call, Throwable t) {
-                        Log.e("REGISTER_ON_FAILURE", t.getMessage());
-                    }
-                });
+                DefaultResponse response = model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(),
+                imageUri, SignIn.this);
+                if (response != null){
+                    showSuccessUserRegisteredMessage();
+                }
             }
         });
 

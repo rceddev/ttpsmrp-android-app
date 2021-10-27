@@ -3,7 +3,7 @@ package com.tt.ttpsmrpapp.network.api.body;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MessageResponse {
+public class DefaultResponse {
 
     @SerializedName("msg")
     @Expose
