@@ -19,11 +19,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Repository {
+public class UserRepository {
     private ApiService apiService;
     private LoginResponse loginResponse;
 
-    public Repository(@NonNull Application application){
+    public UserRepository(@NonNull Application application){
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
     }
 
