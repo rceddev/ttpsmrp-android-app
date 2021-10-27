@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.tt.ttpsmrpapp.data.Repository;
+import com.tt.ttpsmrpapp.data.UserRepository;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginResponse;
 
@@ -13,15 +13,15 @@ public class LoginViewModel extends AndroidViewModel {
 
     private LoginResponse loginResponse;
 
-    private Repository repository;
+    private UserRepository userRepository;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
-        repository = new Repository(application);
+        userRepository = new UserRepository(application);
     }
 
     public LoginResponse makeLoginRequest(LoginRequest loginRequest) {
-        return repository.makeLoginRequest(loginRequest);
+        return userRepository.makeLoginRequest(loginRequest);
     }
 
 }
