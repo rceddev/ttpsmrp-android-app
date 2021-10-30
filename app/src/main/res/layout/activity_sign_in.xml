@@ -16,8 +16,17 @@
         android:textColor="@color/white"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_user_name"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:src="@drawable/default_profile"
+        app:layout_constraintBottom_toTopOf="@+id/edit_text_user_name"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -27,7 +36,7 @@
         app:layout_constraintGuide_end="430dp" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/edit_text_user_name"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
@@ -46,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/edit_text_user_email"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
@@ -62,10 +71,10 @@
         android:textColorHint="@color/texthint_register_forn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_user_name" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/edit_text_user_password"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
@@ -81,10 +90,10 @@
         android:textColorHint="@color/texthint_register_forn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_user_email" />
 
     <EditText
-        android:id="@+id/editTextTextPassword3"
+        android:id="@+id/edit_text_user_repeat_pass"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
@@ -100,9 +109,10 @@
         android:textColorHint="@color/texthint_register_forn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_user_password" />
 
     <Button
+        android:id="@+id/button_register"
         style="@style/Buttons2"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -110,8 +120,10 @@
         android:text="@string/button_sing_in_es"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword3" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_user_repeat_pass"
+        app:layout_constraintVertical_bias="0.545" />
 
     <TextView
         android:id="@+id/textView3"
@@ -119,7 +131,20 @@
         android:layout_height="wrap_content"
         android:text="@string/textview_join_us_es"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_user_name"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_image_picker"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="center"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image"
+        app:srcCompat="@drawable/ic_edit_photo_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
