@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tt.ttpsmrpapp">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ttpsmrpapp">
         <activity
+            android:name=".usecases.session.confirmation.ConfirmationActivity"
+            android:theme="@style/statusBarWithNoActionBar2"
+            ></activity>
+        <activity
             android:name=".usecases.session.signin.SignIn"
-            android:theme="@style/statusBarWithNoActionBar"
-            />
+            android:theme="@style/statusBarWithNoActionBar" />
         <activity
             android:name=".usecases.session.login.Login"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

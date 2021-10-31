@@ -23,4 +23,10 @@
     <string name="hint_pass_es">Contraseña</string>
     <string name="hint_re_pass_es">Repetir contraseña</string>
 
+    <!--Confirmation screen ES-->
+    <string name="textview_confirm_code">Código de verificación</string>
+    <string name="hint_confirm_code">Código</string>
+    <string name="textview_confirm_code_descrition">Introduce el código de verificación \nque hemos enviado a</string>
+    <string name="button_confirm_code">Confirmar</string>
+
 </resources>

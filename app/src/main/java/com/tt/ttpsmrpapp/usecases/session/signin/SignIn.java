@@ -6,10 +6,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.SingleLineTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +23,13 @@ import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
+import com.tt.ttpsmrpapp.usecases.session.confirmation.ConfirmationActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.InterruptedByTimeoutException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -88,11 +92,16 @@ public class SignIn extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 DefaultResponse response = model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(),
                 imageUri, SignIn.this);
                 if (response != null){
                     showSuccessUserRegisteredMessage();
-                }
+                }*?
+                */
+                Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
+                startActivity(toConfirmationActivity);
+
             }
         });
 
