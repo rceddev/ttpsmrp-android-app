@@ -65,9 +65,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/hint_confirm_code"
-            android:inputType="number"
-            android:letterSpacing="1.0"
-            android:maxLength="6"
+            android:maxLines="1"
+            android:lines="1"
+            android:inputType="text"
+            android:letterSpacing="0.5"
+            android:maxLength="10"
             android:textColor="@color/login_highlight_font"
             android:textSize="25sp" />
     </com.google.android.material.textfield.TextInputLayout>

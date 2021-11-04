@@ -7,13 +7,13 @@ public class DefaultResponse {
 
     @SerializedName("code")
     @Expose
-    private int code;
+    private String code;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
