@@ -82,6 +82,8 @@ public class SignIn extends AppCompatActivity {
 
         SignInViewModel model = new ViewModelProvider(this).get(SignInViewModel.class);
 
+        //@todo add field validation
+
         imagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,22 +94,22 @@ public class SignIn extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+                //@todo implementation with full livedata
                 DefaultResponse response = model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(),
                 imageUri, SignIn.this);
                 if (response != null){
+                    Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
+                    startActivity(toConfirmationActivity);
+                }else{
                     showSuccessUserRegisteredMessage();
-                }*?
-                */
-                Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
-                startActivity(toConfirmationActivity);
-
+                }
             }
         });
 
     }
 
     private void showSuccessUserRegisteredMessage() {
-        Toast.makeText(this, "User registered", Toast.LENGTH_SHORT).show();
+        //@todo add mage code response
+        Toast.makeText(this, "Salio Mal", Toast.LENGTH_SHORT).show();
     }
 }
