@@ -7,11 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.tt.ttpsmrpapp.data.UserRepository;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
-import com.tt.ttpsmrpapp.network.api.body.LoginResponse;
+import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 
 public class LoginViewModel extends AndroidViewModel {
 
-    private LoginResponse loginResponse;
+    private TokenResponse tokenResponse;
 
     private UserRepository userRepository;
 
@@ -20,7 +20,7 @@ public class LoginViewModel extends AndroidViewModel {
         userRepository = new UserRepository(application);
     }
 
-    public LoginResponse makeLoginRequest(LoginRequest loginRequest) {
+    public TokenResponse makeLoginRequest(LoginRequest loginRequest) {
         return userRepository.makeLoginRequest(loginRequest);
     }
 

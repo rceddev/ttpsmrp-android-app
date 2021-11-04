@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import android.widget.Toast;
 
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
-import com.tt.ttpsmrpapp.network.api.body.LoginResponse;
+import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.usecases.session.signin.SignIn;
 
 public class Login extends AppCompatActivity {
@@ -50,10 +49,10 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 LoginRequest loginRequest = new LoginRequest(email.getText().toString(), password.getText().toString());
-                LoginResponse loginResponse = loginViewModel.makeLoginRequest(loginRequest);
+                TokenResponse tokenResponse = loginViewModel.makeLoginRequest(loginRequest);
 
-                if (loginResponse != null)
-                    Toast.makeText(Login.this, loginResponse.getToken(), Toast.LENGTH_SHORT).show();
+                if (tokenResponse != null)
+                    Toast.makeText(Login.this, tokenResponse.getToken(), Toast.LENGTH_SHORT).show();
 
             }
         });

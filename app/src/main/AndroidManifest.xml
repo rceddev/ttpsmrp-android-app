@@ -11,10 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ttpsmrpapp">
+        <activity android:name=".usecases.home.HomeActivity"></activity>
         <activity
             android:name=".usecases.session.confirmation.ConfirmationActivity"
-            android:theme="@style/statusBarWithNoActionBar2"
-            ></activity>
+            android:theme="@style/statusBarWithNoActionBar2" />
         <activity
             android:name=".usecases.session.signin.SignIn"
             android:theme="@style/statusBarWithNoActionBar" />
