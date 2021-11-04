@@ -3,14 +3,21 @@ package com.tt.ttpsmrpapp.data;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
+import android.provider.LiveFolders;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.google.gson.Gson;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
+import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
-import com.tt.ttpsmrpapp.network.api.body.LoginResponse;
+import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
 import java.io.ByteArrayOutputStream;
@@ -27,20 +34,22 @@ import retrofit2.Response;
 
 public class UserRepository {
     private ApiService apiService;
-    private LoginResponse loginResponse;
+    private TokenResponse tokenResponse;
+    private MutableLiveData<TokenResponse> tokenResponseLiveData;
     private DefaultResponse defaultResponse;
 
     public UserRepository(@NonNull Application application){
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
+        this.tokenResponseLiveData = new MutableLiveData<>();
     }
 
-    public LoginResponse makeLoginRequest(LoginRequest loginRequest){
-        Call<LoginResponse> call = apiService.login(loginRequest);
-        call.enqueue(new Callback<LoginResponse>() {
+    public TokenResponse makeLoginRequest(LoginRequest loginRequest){
+        Call<TokenResponse> call = apiService.login(loginRequest);
+        call.enqueue(new Callback<TokenResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.isSuccessful()){
-                    setLoginResponse(response.body());
+                    setTokenResponse(response.body());
 
                 }else {
                     try {
@@ -51,12 +60,12 @@ public class UserRepository {
                 }
             }
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
                 Log.e("ON_FAILURE", t.getMessage());
             }
         });
 
-        return loginResponse;
+        return tokenResponse;
     }
 
     public DefaultResponse registerUserRequest(String userName, String userEmail, String userPassword, Uri userImage, Context context){
@@ -124,8 +133,38 @@ public class UserRepository {
         return defaultResponse;
     }
 
-    private void setLoginResponse(LoginResponse loginResponse){
-        this.loginResponse = loginResponse;
+    public MutableLiveData<TokenResponse> confirmCode(ConfirmCodeRequest confirmCodeRequest) {
+        Call<TokenResponse> call = apiService.confirmCode(confirmCodeRequest);
+        call.enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                if (response.isSuccessful()){
+                    TokenResponse tokenResponseResponse = response.body();
+                    setTokenResponseLive(tokenResponseResponse);
+                    Log.e("TOKEN" , tokenResponseResponse.getToken());
+                }else {
+                    Gson gson = new Gson();
+                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+                    Log.e("TOKEN ERROR" , errorResponse.getCode());
+                    TokenResponse errorTokenResponse = new TokenResponse();
+                    errorTokenResponse.setCode(errorResponse.getCode());
+                    setTokenResponse(errorTokenResponse);
+                }
+            }
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                Log.e("ON_FAILURE", t.getMessage());
+            }
+        });
+        return tokenResponseLiveData;
+    }
+
+    private void setTokenResponseLive(TokenResponse tokenResponse){
+        this.tokenResponseLiveData.setValue(tokenResponse);
+    }
+
+    private void setTokenResponse(TokenResponse tokenResponse){
+        this.tokenResponse = tokenResponse;
     }
 
     private void setDefaultResponse(DefaultResponse defaultResponse){
