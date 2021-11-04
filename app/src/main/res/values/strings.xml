@@ -29,4 +29,8 @@
     <string name="textview_confirm_code_descrition">Introduce el código de verificación \nque hemos enviado a</string>
     <string name="button_confirm_code">Confirmar</string>
 
+    <!--Error codes -->
+    <string name="code_error_invalid">Código invalido</string>
+    <string name="code_error_empty">Código vacio</string>
+    <string name="code_error_unssuported_error">Error inesperado</string>
 </resources>
