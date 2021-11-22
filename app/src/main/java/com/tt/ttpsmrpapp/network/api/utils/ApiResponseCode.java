@@ -5,22 +5,22 @@ public interface ApiResponseCode {
      * Code for Login response.
      */
     //Errors
-    public static final int USER_NOT_ACTIVATE = 2001;
-    public static final int EMAIL_NOT_EXIST = 2002;
-    public static final int INCORRECT_PASSWORD = 2003;
+    public static final String USER_NOT_ACTIVATE = "2001";
+    public static final String EMAIL_NOT_EXIST = "2002";
+    public static final String INCORRECT_PASSWORD = "2003";
 
 
     /**
      * Code for Register response.
      */
     //Success
-    public static final int USER_REGISTERED=1001;
+    public static final String USER_REGISTERED="1001";
     //Errors
-    public static final int USERNAME_REPEATED = 2004;
-    public static final int IMAGE_EMPTY = 2005;
-    public static final int EMAIL_REPEATED= 2006;
-    public static final int PASSWORD_EMPTY = 2007;
-    public static final int EMAIL_EMPTY= 2008;
+    public static final String USERNAME_REPEATED = "2004";
+    public static final String IMAGE_EMPTY = "2005";
+    public static final String EMAIL_REPEATED= "2006";
+    public static final String PASSWORD_EMPTY = "2007";
+    public static final String EMAIL_EMPTY= "2008";
 
     /**
      * Code for Update User response.
