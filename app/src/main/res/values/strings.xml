@@ -33,4 +33,19 @@
     <string name="code_error_invalid">Código invalido</string>
     <string name="code_error_empty">Código vacio</string>
     <string name="code_error_unssuported_error">Error inesperado</string>
+
+    <!-- Bluetooth picker Fragment -->
+    <string name="bt_toolbar_title_es">Selecciona un dispositivo bluetooth</string>
+    <string name="bt_button_next_es">Siguiente</string>
+
+    <!-- Wi-fi picker Fragment -->
+    <string name="wifi_toolbar_title_es">Selecciona red Wi-Fi</string>
+
+    <!--Plant data Fragment-->
+    <string name="plant_data_fragment_toolbar_title_es">Selecciona informacion de la planta</string>
+    <string name="plant_data_fragment_textview_place_es">Selecciona el lugar de la planta</string>
+    <string name="plant_data_fragment_label_place_select_es">Lugar</string>
+    <string name="plant_data_fragment_textview_specie_es">Selecciona la especie de la planta</string>
+    <string name="plant_data_fragment_label_specie_select_es">Planta</string>
+    <string name="plant_data_fragment_button">Registrar nodo</string>
 </resources>

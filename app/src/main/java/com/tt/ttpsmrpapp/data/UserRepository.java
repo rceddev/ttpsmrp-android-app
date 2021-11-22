@@ -36,11 +36,13 @@ public class UserRepository {
     private ApiService apiService;
     private TokenResponse tokenResponse;
     private MutableLiveData<TokenResponse> tokenResponseLiveData;
+    private MutableLiveData<DefaultResponse> defaultResponseMutableLiveData;
     private DefaultResponse defaultResponse;
 
     public UserRepository(@NonNull Application application){
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
         this.tokenResponseLiveData = new MutableLiveData<>();
+        this.defaultResponseMutableLiveData = new MutableLiveData<>();
     }
 
     public TokenResponse makeLoginRequest(LoginRequest loginRequest){
@@ -68,7 +70,7 @@ public class UserRepository {
         return tokenResponse;
     }
 
-    public DefaultResponse registerUserRequest(String userName, String userEmail, String userPassword, Uri userImage, Context context){
+    public MutableLiveData<DefaultResponse> registerUserRequest(String userName, String userEmail, String userPassword, Uri userImage, Context context){
 
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), userName);
         RequestBody email = RequestBody.create(MediaType.parse("text/plain"), userEmail);
@@ -117,7 +119,8 @@ public class UserRepository {
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 if (response.isSuccessful()){
                     if (response.body() != null && response.body() instanceof DefaultResponse){
-                        setDefaultResponse(response.body());
+                        //setDefaultResponse(response.body());
+                        setDefaultResponseMutableLiveData(response.body());
                     }
                 }
                 else{
@@ -130,7 +133,7 @@ public class UserRepository {
                 Log.e("REGISTER_ON_FAILURE", t.getMessage());
             }
         });
-        return defaultResponse;
+        return defaultResponseMutableLiveData;
     }
 
     public MutableLiveData<TokenResponse> confirmCode(ConfirmCodeRequest confirmCodeRequest) {
@@ -161,6 +164,10 @@ public class UserRepository {
 
     private void setTokenResponseLive(TokenResponse tokenResponse){
         this.tokenResponseLiveData.setValue(tokenResponse);
+    }
+
+    private void setDefaultResponseMutableLiveData(DefaultResponse defaultResponse){
+        this.defaultResponseMutableLiveData.setValue(defaultResponse);
     }
 
     private void setTokenResponse(TokenResponse tokenResponse){

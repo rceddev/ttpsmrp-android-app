@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -38,6 +39,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode.*;
 
 public class SignIn extends AppCompatActivity {
 
@@ -82,7 +85,7 @@ public class SignIn extends AppCompatActivity {
 
         SignInViewModel model = new ViewModelProvider(this).get(SignInViewModel.class);
 
-        //@todo add field validation
+        //TODO: add field validation
 
         imagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,22 +97,30 @@ public class SignIn extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //@todo implementation with full livedata
-                DefaultResponse response = model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(),
-                imageUri, SignIn.this);
-                if (response != null){
-                    Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
-                    startActivity(toConfirmationActivity);
-                }else{
-                    showSuccessUserRegisteredMessage();
-                }
+                final Observer<DefaultResponse> defaultResponseObserver = new Observer<DefaultResponse>() {
+                    @Override
+                    public void onChanged(DefaultResponse defaultResponse) {
+                        manageResponse(defaultResponse);
+                    }
+                };
+                model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(), imageUri, SignIn.this)
+                    .observe(SignIn.this, defaultResponseObserver);
             }
         });
 
     }
 
-    private void showSuccessUserRegisteredMessage() {
-        //@todo add mage code response
-        Toast.makeText(this, "Salio Mal", Toast.LENGTH_SHORT).show();
+    private void manageResponse(DefaultResponse defaultResponse) {
+        //TODO: add management of left code responses
+        switch (defaultResponse.getCode()){
+            case USER_REGISTERED:
+                Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
+                startActivity(toConfirmationActivity);
+                break;
+            default:
+                Toast.makeText(this, "Salio Mal", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 }
