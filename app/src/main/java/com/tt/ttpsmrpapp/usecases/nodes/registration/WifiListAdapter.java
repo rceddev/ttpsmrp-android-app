@@ -6,31 +6,36 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.data.model.AccessPointBean;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.utils.WifiNetWorkModel;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.ViewHolder> {
+public class WifiListAdapter extends ListAdapter<WifiNetWorkModel, WifiListAdapter.ViewHolder> {
+
+    public WifiListAdapter(@NonNull DiffUtil.ItemCallback<WifiNetWorkModel> diffCallback
+            , WifiItemOnclickListener listener) {
+        super(diffCallback);
+        this.listener = listener;
+    }
 
     public interface WifiItemOnclickListener {
-        public void wifiItemClicked(int position);
+        void wifiItemClicked(WifiNetWorkModel position);
     }
 
     WifiItemOnclickListener listener;
 
-    private ArrayList<WifiNetWorkModel> wifiList;
-
-
-
-    public WifiListAdapter(ArrayList<WifiNetWorkModel> wifiList, WifiItemOnclickListener listener){
+    /*public WifiListAdapter(ArrayList<WifiNetWorkModel> wifiList, WifiItemOnclickListener listener){
         this.listener = listener;
         this.wifiList = wifiList;
-    }
+    }*/
 
     @NonNull
     @Override
@@ -42,12 +47,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getWifiNameTextView().setText(wifiList.get(position).getWifiName());
-    }
-
-    @Override
-    public int getItemCount() {
-        return wifiList.size();
+        holder.getWifiNameTextView().setText(getItem(position).getWifiName());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,7 +66,21 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            listener.wifiItemClicked(getAdapterPosition());
+            int position = getLayoutPosition();
+            listener.wifiItemClicked(getItem(position));
+        }
+    }
+
+    public static class WifiListDiff extends DiffUtil.ItemCallback<WifiNetWorkModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull WifiNetWorkModel oldItem, @NonNull WifiNetWorkModel newItem) {
+            return oldItem.getWifiName().equals(newItem.getWifiName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull WifiNetWorkModel oldItem, @NonNull WifiNetWorkModel newItem) {
+            return oldItem.equals(newItem);
         }
     }
 }

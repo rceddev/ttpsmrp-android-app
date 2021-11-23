@@ -1,11 +1,18 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration.fragments;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,12 +21,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.esp32.ESP32Defs;
+import com.tt.ttpsmrpapp.network.bluetooth.Result;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.BluetoothListAdapter;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
 import java.util.ArrayList;
+import java.util.Set;
+
+import javax.security.auth.login.LoginException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +42,13 @@ import java.util.ArrayList;
  */
 public class BluetoothPickerFragment extends Fragment {
 
+    /* Debug tag */
+    public static final String TAG = BluetoothPickerFragment.class.getSimpleName();
+
     private Button buttonBluetoothNext;
     private RecyclerView bluetoothRecyclerView;
     private String macAddress;
+    private InitViewModel viewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,48 +98,67 @@ public class BluetoothPickerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bluetooth_picker, container, false);
         buttonBluetoothNext = view.findViewById(R.id.button6);
         bluetoothRecyclerView = view.findViewById(R.id.bluetooth_device_recycler_view);
-
-        ArrayList<BluetoothDevice> pairedBthDevices = getPairedBtDevices();
-
-        BluetoothListAdapter adapter = new BluetoothListAdapter(pairedBthDevices, new BluetoothListAdapter.BluetoothItemOnclickListener() {
-            @Override
-            public void bluetoothItemClicked(int position) {
-                connectToBluetoohDevice(pairedBthDevices.get(position));
-            }
-        });
-
+        /* ViewModel */
+        viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        /* Adapter */
+        ArrayList<BluetoothDevice> pairedBthDevices = viewModel.getPairedDevices();
+        BluetoothListAdapter adapter = new BluetoothListAdapter(pairedBthDevices, position -> connectToBluetoohDevice(pairedBthDevices.get(position)));
         buttonBluetoothNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toWifiConfig();
             }
         });
+        bluetoothRecyclerView.setAdapter(adapter);
+        bluetoothRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
     }
 
-    private ArrayList<BluetoothDevice> getPairedBtDevices() {
-        //TODO: Do the logic to get the paired bluetooth devices
-        return new ArrayList<BluetoothDevice>();
-    }
+    /*private ArrayList<BluetoothDevice> getPairedBtDevices() {
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            return new ArrayList<>(pairedDevices);
+        }
+        return null;
+    }*/
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void connectToBluetoohDevice(BluetoothDevice btDevice){
+    private void connectToBluetoohDevice(BluetoothDevice btDevice) {
         //TODO: Do the needed stuff to connect phone to provided bluetooth device(btDevice), also:
         // - add validation, if the connection was successful enable the next button
         // - replace the "macAddress" member variable with the MAC-address of the node
-        macAddress = "MAC-ADDRESS";
+        Toast.makeText(getContext(), String.format("Conectando a %s", btDevice.getName()), Toast.LENGTH_SHORT).show();
+        viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI);
+        macAddress = btDevice.getAddress();
         buttonBluetoothNext.setEnabled(true);
+
     }
 
-    public void toWifiConfig(){
+    public void toWifiConfig() {
         getParentFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragment_container_view,WifiConfigFragment.class, null)
+                .replace(R.id.fragment_container_view, WifiConfigFragment.class, null)
                 .addToBackStack("wifi")
                 .commit();
     }
+
+    ActivityResultLauncher<Intent> bluetoothEnableLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                switch (result.getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Log.d(TAG, "bluetoothEnableIntent: Bluetooth habilitado correctamente!");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.d(TAG, "bluetoothEnableIntent: Permiso cerrado");
+                        break;
+                    default:
+                        Log.e(TAG, String.format("bluetoothEnableIntent: Error habilitando bluetooth code %d", result.getResultCode()));
+                        break;
+                }
+            });
 }
