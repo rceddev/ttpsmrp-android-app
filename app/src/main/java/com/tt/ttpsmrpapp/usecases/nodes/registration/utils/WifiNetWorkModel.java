@@ -1,5 +1,7 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration.utils;
 
+import androidx.annotation.Nullable;
+
 public class WifiNetWorkModel {
 
     public static final int WIFI_SIGNAL_LEVEL_1 = 1;
@@ -40,5 +42,10 @@ public class WifiNetWorkModel {
 
     public void setWifiLocked(boolean wifiLocked) {
         isWifiLocked = wifiLocked;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
     }
 }

@@ -46,7 +46,8 @@ public class WifiPassDialogFragment extends DialogFragment {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogPositiveClick(WifiPassDialogFragment.this, wifiPassEditText.getText().toString());
+                        listener.onDialogPositiveClick(WifiPassDialogFragment.this,
+                                wifiPassEditText.getText().toString());
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
