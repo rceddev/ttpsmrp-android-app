@@ -52,6 +52,4 @@ public interface ApiResponseCode {
     //Success
     public static final String PASSWORD_CHANGED = "1004";
 
-
-
 }

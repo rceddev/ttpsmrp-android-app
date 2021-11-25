@@ -2,6 +2,7 @@ package com.tt.ttpsmrpapp.network.api;
 
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
+import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
@@ -24,4 +25,7 @@ public interface ApiService {
 
     @POST("api/usuario/validate")
     Call<TokenResponse> confirmCode(@Body ConfirmCodeRequest confirmCodeRequest);
+
+    @POST("/api/nodo_central/register")
+    Call<TokenResponse> registerCentralNode(@Body NodeCRegisterRequest registerNodoCRequest);
 }
