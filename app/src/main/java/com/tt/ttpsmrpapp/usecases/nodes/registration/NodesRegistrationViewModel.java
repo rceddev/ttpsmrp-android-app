@@ -21,7 +21,7 @@ public class NodesRegistrationViewModel extends AndroidViewModel {
         repository = new NodeRepository(application);
     }
 
-    public MutableLiveData<TokenResponse> registerNC(NodeCRegisterRequest request) {
-        return repository.makeLoginRequest(request);
+    public MutableLiveData<TokenResponse> registerNC(NodeCRegisterRequest request, String token) {
+        return repository.makeLoginRequest(request, token);
     }
 }

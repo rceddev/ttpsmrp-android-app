@@ -115,12 +115,11 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
     }
 
     private void toPlantDataPickerFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_KEY_ID_BLUETOOTH, idBluetooth);
+
 
         getParentFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragment_container_view, PlantDataFragment.class, bundle)
+                .replace(R.id.fragment_container_view, PlantDataFragment.newInstance(idBluetooth))
                 .addToBackStack("plant")
                 .commit();
     }

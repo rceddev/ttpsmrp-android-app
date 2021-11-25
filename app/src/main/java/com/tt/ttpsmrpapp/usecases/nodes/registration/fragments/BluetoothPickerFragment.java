@@ -141,7 +141,7 @@ public class BluetoothPickerFragment extends Fragment {
     public void toWifiConfig() {
         getParentFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragment_container_view, WifiConfigFragment.class, null)
+                .replace(R.id.fragment_container_view, WifiConfigFragment.newInstance(macAddress))
                 .addToBackStack("wifi")
                 .commit();
     }
