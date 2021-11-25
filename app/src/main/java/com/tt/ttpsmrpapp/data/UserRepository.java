@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.google.gson.Gson;
 import com.tt.ttpsmrpapp.network.api.ApiService;
@@ -24,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -37,7 +39,7 @@ public class UserRepository {
     private TokenResponse tokenResponse;
     private MutableLiveData<TokenResponse> tokenResponseLiveData;
     private MutableLiveData<DefaultResponse> defaultResponseMutableLiveData;
-    private DefaultResponse defaultResponse;
+
 
     public UserRepository(@NonNull Application application){
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
@@ -45,29 +47,74 @@ public class UserRepository {
         this.defaultResponseMutableLiveData = new MutableLiveData<>();
     }
 
-    public TokenResponse makeLoginRequest(LoginRequest loginRequest){
-        Call<TokenResponse> call = apiService.login(loginRequest);
-        call.enqueue(new Callback<TokenResponse>() {
+    public MutableLiveData<TokenResponse> makeLoginRequest(LoginRequest loginRequest){
+        //TODO: Remove unnecessary comments and manage correct member variable names
+        MutableLiveData<TokenResponse> tokenResponseML = new MutableLiveData<>();
+        apiService.login(loginRequest).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.isSuccessful()){
-                    setTokenResponse(response.body());
-
-                }else {
-                    try {
-                        Log.e("NOT_SUCCESFUL", response.errorBody().string());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    tokenResponseML.setValue(response.body());
+                    Log.d("TokenResponse", response.body().getToken());
+                } else {
+                    Gson gson = new Gson();
+                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+                    TokenResponse errorTokenResponse = new TokenResponse();
+                    errorTokenResponse.setCode(errorResponse.getCode());
+                    tokenResponseML.setValue(errorTokenResponse);
+                    Log.d("TokenResponseError", "Error code: " + errorTokenResponse.getCode());
                 }
             }
+
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
-                Log.e("ON_FAILURE", t.getMessage());
+                Log.e("RequestError", t.getMessage());
             }
         });
+        return tokenResponseML;
+//        TokenResponse tokenResponse = new TokenResponse();
+//        try {
+//            Response<TokenResponse> response = call.execute();
+//            if (response.isSuccessful()){
+//                //setTokenResponseLive(response.body());
+//                tokenResponse = response.body();
+//                Log.e("TOKEN SUCCESS", response.body().getToken());
+//            }else{
+//                Gson gson = new Gson();
+//                DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+//                //TokenResponse errorTokenResponse = new TokenResponse();
+//                tokenResponse = new TokenResponse();
+//                tokenResponse.setCode(errorResponse.getCode());
+//                //setTokenResponse(errorTokenResponse);
+//
+//                Log.e("REPOSITORY" ,  "Code:" +errorResponse.getCode());
+//            }
+//        }catch (IOException e){
+//            Log.e("ON_FAILURE", "Connection lost");
+//        }
+//        call.enqueue(new Callback<TokenResponse>() {
+//            @Override
+//            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+//                if (response.isSuccessful()){
+//                    setTokenResponseLive(response.body());
+//                    Log.e("TOKEN SUCCESS", response.body().getToken());
+//                }else {
+//                    Gson gson = new Gson();
+//                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+//                    TokenResponse errorTokenResponse = new TokenResponse();
+//                    errorTokenResponse.setCode(errorResponse.getCode());
+//                    setTokenResponse(errorTokenResponse);
+//
+//                    Log.e("REPOSITORY" ,  "Code:" +errorResponse.getCode());
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<TokenResponse> call, Throwable t) {
+//                Log.e("ON_FAILURE", t.getMessage());
+//            }
+//        });
 
-        return tokenResponse;
+//        return tokenResponse;
     }
 
     public MutableLiveData<DefaultResponse> registerUserRequest(String userName, String userEmail, String userPassword, Uri userImage, Context context){
@@ -172,9 +219,5 @@ public class UserRepository {
 
     private void setTokenResponse(TokenResponse tokenResponse){
         this.tokenResponse = tokenResponse;
-    }
-
-    private void setDefaultResponse(DefaultResponse defaultResponse){
-        this.defaultResponse = defaultResponse;
     }
 }

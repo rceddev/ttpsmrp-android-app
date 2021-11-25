@@ -40,12 +40,10 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
     private WifiNetWorkModel selectedNet;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String BUNDLE_KEY_ID_BLUETOOTH = "id_bluetooth";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String idBluetooth;
 
     public WifiConfigFragment() {
         // Required empty public constructor
@@ -56,15 +54,13 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment WifiConfigFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WifiConfigFragment newInstance(String param1, String param2) {
+    public static WifiConfigFragment newInstance(String param1) {
         WifiConfigFragment fragment = new WifiConfigFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(BUNDLE_KEY_ID_BLUETOOTH, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,8 +70,7 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            idBluetooth = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH);
         }
     }
 
@@ -120,9 +115,12 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
     }
 
     private void toPlantDataPickerFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_KEY_ID_BLUETOOTH, idBluetooth);
+
         getParentFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragment_container_view, PlantDataFragment.class, null)
+                .replace(R.id.fragment_container_view, PlantDataFragment.class, bundle)
                 .addToBackStack("plant")
                 .commit();
     }
