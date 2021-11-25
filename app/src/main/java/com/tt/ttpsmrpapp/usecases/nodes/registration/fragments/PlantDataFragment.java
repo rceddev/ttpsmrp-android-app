@@ -1,5 +1,6 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
@@ -114,12 +116,12 @@ public class PlantDataFragment extends Fragment {
                 Log.d("PlantSelectedId", "ID:"+ getIdOfSelectedItem(getPlantsSupported(),typePlantTextInput.getEditText().getText().toString()));
                 NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
                         placePlantTextInput.getEditText().getText().toString() ,
-                        String.valueOf( getIdOfSelectedItem(getPlacesSupportedNames(),
-                                placePlantTextInput.getEditText().getText().toString())));
+                        String.valueOf(4));
 
-                viewModelNC.registerNC(request).observe(getActivity(),tokenResponse -> {
+                viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
                         //TODO: Manage erro base on code
+                        setTemporalToken("ErrorCode:"+tokenResponse.getCode());
                     }else{
                         setTemporalToken(tokenResponse.getToken());
                     }
@@ -159,6 +161,15 @@ public class PlantDataFragment extends Fragment {
 
     private void setTemporalToken(String temporalToken){
         //TODO: This temporalToken is the provided by API. Set this token to node here
+        Log.d("NCTemporalTokenResponse", temporalToken);
+
+        //TODO: Add logic to validate if the registration is complete, replace if
+        boolean success = true;
+        if (success){
+            Intent intent = new Intent(getContext(), HomeActivity.class);
+            startActivity(intent);
+        }
+
     }
 
 

@@ -33,41 +33,39 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         /* ViewModel */
-//        viewModel = new ViewModelProvider(this).get(InitViewModel.class);
-//        viewModel.setBluetoothRepository(new BluetoothRepository());
+        viewModel = new ViewModelProvider(this).get(InitViewModel.class);
+        viewModel.setBluetoothRepository(new BluetoothRepository());
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_view, BluetoothPickerFragment.class, null)
+                    .commit();
+        }
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .setReorderingAllowed(true)
-//                    .add(R.id.fragment_container_view, BluetoothPickerFragment.class, null)
+//                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKFDKKFKD:FADSlFADSF"))
 //                    .commit();
 //        }
-        if (savedInstanceState == null) {
-//            Bundle bundle = new Bundle();
-//            bundle.putString("id_bluetooth", "1111");
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("1111"))
-                    .commit();
+        if ( !viewModel.bluetoothControllerEnabled()  ) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            bluetoothEnableLauncher.launch(enableBtIntent);
         }
-//        if ( !viewModel.bluetoothControllerEnabled()  ) {
-//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            bluetoothEnableLauncher.launch(enableBtIntent);
-//        }
     }
 
-//    ActivityResultLauncher<Intent> bluetoothEnableLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            (ActivityResult result) -> {
-//                switch (result.getResultCode()) {
-//                    case Activity.RESULT_OK:
-//                        Log.d(TAG, "bluetoothEnableIntent: Bluetooth habilitado correctamente!");
-//                        break;
-//                    case Activity.RESULT_CANCELED:
-//                        Log.d(TAG, "bluetoothEnableIntent: Permiso cerrado");
-//                        break;
-//                    default:
-//                        Log.e(TAG, String.format("bluetoothEnableIntent: Error habilitando bluetooth code %d", result.getResultCode()));
-//                        break;
-//                }
-//            });
+    ActivityResultLauncher<Intent> bluetoothEnableLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
+                switch (result.getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Log.d(TAG, "bluetoothEnableIntent: Bluetooth habilitado correctamente!");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Log.d(TAG, "bluetoothEnableIntent: Permiso cerrado");
+                        break;
+                    default:
+                        Log.e(TAG, String.format("bluetoothEnableIntent: Error habilitando bluetooth code %d", result.getResultCode()));
+                        break;
+                }
+            });
 }
