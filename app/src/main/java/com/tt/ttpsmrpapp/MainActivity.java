@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
-
+	
+    //Callback to home activity
     public void toHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
