@@ -36,17 +36,26 @@ public class NodeRepository {
                 } else {
 
                     try {
-                        Log.e("NCTokenError:",response.errorBody().string());
+                        //Log.e("NCTokenError:",response.errorBody().string());
+                        Gson gson = new Gson();
+                        String responseBody = response.errorBody().string();
+                        DefaultResponse errorResponse = gson.fromJson(responseBody, DefaultResponse.class);
+                        TokenResponse errorTokenResponse = new TokenResponse();
+                        errorTokenResponse.setCode(errorResponse.getCode());
+                        responseMutableLiveData.setValue(errorTokenResponse);
+                        Log.d("NCTokenResponseError", "Error code: " + errorTokenResponse.getCode());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
+                    /*
                     Gson gson = new Gson();
                     DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
                     TokenResponse errorTokenResponse = new TokenResponse();
                     errorTokenResponse.setCode(errorResponse.getCode());
                     responseMutableLiveData.setValue(errorTokenResponse);
                     Log.d("NCTokenResponseError", "Error code: " + errorTokenResponse.getCode());
+
+                    */
                 }
             }
 

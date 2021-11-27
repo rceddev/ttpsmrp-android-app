@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
@@ -121,7 +122,17 @@ public class PlantDataFragment extends Fragment {
                 viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
                         //TODO: Manage erro base on code
-                        setTemporalToken("ErrorCode:"+tokenResponse.getCode());
+                        switch (tokenResponse.getCode()){
+                            case ApiResponseCode.IDBLUETOOTH_REPEATED:
+                                Toast.makeText(getActivity(), "Ya se ha registrado este nodo", Toast.LENGTH_SHORT).show();
+                                break;
+                            case ApiResponseCode.NOT_EXIST_PLANT:
+                                Toast.makeText(getActivity(), "Selecciona una planta valida", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(getActivity(), "Error inesperado: " + tokenResponse.getCode(), Toast.LENGTH_SHORT).show();
+                                break;
+                        }
                     }else{
                         setTemporalToken(tokenResponse.getToken());
                     }
