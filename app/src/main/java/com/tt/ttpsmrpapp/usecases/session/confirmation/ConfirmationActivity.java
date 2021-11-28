@@ -51,7 +51,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         if (tokenResponse != null) {
             if (tokenResponse.getCode() != null) {
                 switch (tokenResponse.getCode()) {
-                    case CODE_INVALID:
+                    case INVALID_CODE:
                         Toast.makeText(this, getString(R.string.code_error_invalid), Toast.LENGTH_SHORT).show();
                         break;
                     case CODE_IS_EMPTY:
