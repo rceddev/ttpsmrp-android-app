@@ -18,12 +18,21 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.ViewHolder> {
-
     private ArrayList<NodeCentral> nodeCentrals;
+
+    public ArrayList<NodeCentral> getNodeCentrals() {
+        return nodeCentrals;
+    }
+
+    public void setNodeCentrals(ArrayList<NodeCentral> nodeCentrals) {
+        this.nodeCentrals = nodeCentrals;
+    }
 
     public NodeCentralAdapter (ArrayList<NodeCentral> nodeCentrals) {
         this.nodeCentrals = nodeCentrals;
     }
+
+
 
     @NonNull
     @Override
