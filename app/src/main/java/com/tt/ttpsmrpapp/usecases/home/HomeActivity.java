@@ -50,7 +50,6 @@ public class HomeActivity extends AppCompatActivity {
 
         if (session.isLoggedIn()) {
             this.viewModel.getNodeCentral(session.getToken()).observe(this, nodeCentrals -> {
-                Log.e("CentralNodesSize", String.valueOf(nodeCentrals.size()));
                 this.nodeCentrals.clear();
                 for (NodeCentral node : nodeCentrals){
                     this.nodeCentrals.add(node);
@@ -68,30 +67,4 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private ArrayList<NodeCentral> getNodeCentrals(){
-//        ArrayList<NodeCentral> nodeCentrals = new ArrayList<>();
-//
-//        NodeCentral node1 = new NodeCentral();
-//        NodeCentral node2 = new NodeCentral();
-//        NodeCentral node3 = new NodeCentral();
-//
-//        node1.setAlias("Jitomate");
-//        node1.setScientificName("nombre cientifico del jitomate");
-//        node1.setNodeName("Jardin");
-//
-//        node2.setAlias("Lechuga");
-//        node2.setScientificName("nombre cientifico del Lechuga");
-//        node2.setNodeName("Zotehuela");
-//
-//        node3.setAlias("Rabano");
-//        node3.setScientificName("nombre cientifico del rabano");
-//        node3.setNodeName("Azotea");
-//
-//        nodeCentrals.add(node1);
-//        nodeCentrals.add(node2);
-//        nodeCentrals.add(node3);
-//
-//        return nodeCentrals;
-//
-//    }
 }

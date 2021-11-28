@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 
@@ -47,6 +48,7 @@ public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.
         //Set each view the node central information
         holder.getNodeCentralName().setText(nodeCentrals.get(position).getNodeName());
         holder.getNodeCentralPlant().setText(String.format("%s (%s)", nodeCentrals.get(position).getAlias(), nodeCentrals.get(position).getScientificName()));
+        Picasso.get().load(nodeCentrals.get(position).getUrl()).fit().into(holder.getNodeCentralImage());
     }
 
     @Override
