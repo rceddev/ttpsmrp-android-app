@@ -24,6 +24,7 @@ import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
 
@@ -39,6 +40,7 @@ public class PlantDataFragment extends Fragment {
     private AutoCompleteTextView placePlantAutoCompleteText;
     private AutoCompleteTextView typePlantAutoCompleteTextView;
     private Button registerNode;
+    private InitViewModel viewModel;
 
     private NodesRegistrationViewModel viewModelNC;
 
@@ -77,8 +79,9 @@ public class PlantDataFragment extends Fragment {
         if (getArguments() != null) {
             idBluetooth = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH);
         }
-
         session = new Session(getContext());
+        /* ViewModel */
+        viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
     }
 
     @Override
@@ -173,7 +176,7 @@ public class PlantDataFragment extends Fragment {
     private void setTemporalToken(String temporalToken){
         //TODO: This temporalToken is the provided by API. Set this token to node here
         Log.d("NCTemporalTokenResponse", temporalToken);
-
+        viewModel.sendTempToken(temporalToken);
         //TODO: Add logic to validate if the registration is complete, replace if
         boolean success = true;
         if (success){

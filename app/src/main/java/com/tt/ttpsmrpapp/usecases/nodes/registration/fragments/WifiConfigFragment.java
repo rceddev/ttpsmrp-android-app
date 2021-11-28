@@ -128,13 +128,7 @@ public class WifiConfigFragment extends Fragment implements WifiPassDialogFragme
     public void onDialogPositiveClick(DialogFragment dialog, String wifiPass) {
         //TODO: Do the process to connect node to wi-fi using wifiPass parameter then:
         // - add validation: if its success, enable next button (disabled by default)
-        try {
-            viewModel.sendWiFiCredentials(selectedNet.getWifiName(), wifiPass);
-            Thread.sleep(3000);
-            viewModel.sendTempToken(InitViewModel.TOKEN);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        viewModel.sendWiFiCredentials(selectedNet.getWifiName(), wifiPass);
         buttonWifiNext.setEnabled(true);
     }
 

@@ -1,6 +1,7 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration;
 
 import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +24,6 @@ import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 public class NodeCRegistrationActivity extends AppCompatActivity {
 
     public static final String TAG = NodeCRegistrationActivity.class.getSimpleName();
-    private BluetoothAdapter bluetoothAdapter;
     private InitViewModel viewModel;
 
     @Override
@@ -32,14 +32,32 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_node_c_registration);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+
         /* ViewModel */
         viewModel = new ViewModelProvider(this).get(InitViewModel.class);
         viewModel.setBluetoothRepository(new BluetoothRepository());
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, BluetoothPickerFragment.class, null)
-                    .commit();
+        /* Check BT, only add the fragment when BT controller is enabled */
+        if ( !viewModel.bluetoothControllerEnabled()  ) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    (ActivityResult result) -> {
+                        switch (result.getResultCode()) {
+                            case Activity.RESULT_OK:
+                                Log.d(TAG, "bluetoothEnableIntent: Bluetooth habilitado correctamente!");
+                                addBluetoothPickerFragment(savedInstanceState);
+                                break;
+                            case Activity.RESULT_CANCELED:
+                                Log.d(TAG, "bluetoothEnableIntent: Permiso cerrado");
+                                break;
+                            default:
+                                Log.e(TAG, String.format("bluetoothEnableIntent: Error habilitando bluetooth code %d",
+                                        result.getResultCode()));
+                                break;
+                        }
+            }).launch(enableBtIntent);
+        } else {
+            /* Fragment */
+            addBluetoothPickerFragment(savedInstanceState);
         }
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
@@ -47,25 +65,14 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
 //                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKFDKKFKD:FADSlFADSF"))
 //                    .commit();
 //        }
-        if ( !viewModel.bluetoothControllerEnabled()  ) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            bluetoothEnableLauncher.launch(enableBtIntent);
-        }
     }
 
-    ActivityResultLauncher<Intent> bluetoothEnableLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            (ActivityResult result) -> {
-                switch (result.getResultCode()) {
-                    case Activity.RESULT_OK:
-                        Log.d(TAG, "bluetoothEnableIntent: Bluetooth habilitado correctamente!");
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Log.d(TAG, "bluetoothEnableIntent: Permiso cerrado");
-                        break;
-                    default:
-                        Log.e(TAG, String.format("bluetoothEnableIntent: Error habilitando bluetooth code %d", result.getResultCode()));
-                        break;
-                }
-            });
+    private void addBluetoothPickerFragment(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_view, BluetoothPickerFragment.class, null)
+                    .commit();
+        }
+    }
 }

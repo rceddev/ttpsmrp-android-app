@@ -112,15 +112,11 @@ public class InitViewModel extends ViewModel {
     public boolean bluetoothControllerEnabled() {
         /* Get BT Adapter, launch enable intent if not enabled */
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); /* Replace (deprecated) */
-        if (bluetoothAdapter == null) {
+        if (bluetoothAdapter == null) { // TODO: Manejar cuando no hay adaptador?
             Log.e(TAG, "initDev: Controlador de Bluetooth no encontrado");
-        }
-        Log.d(TAG, "initDev: Controlador BL encontrado");
-        if (!bluetoothAdapter.isEnabled()) {
-            Log.i(TAG, "initDev: Habilitando Bluetooth...");
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             return false;
         }
-        return true;
+        Log.d(TAG, "initDev: Controlador BL encontrado");
+        return bluetoothAdapter.isEnabled();
     }
 }
