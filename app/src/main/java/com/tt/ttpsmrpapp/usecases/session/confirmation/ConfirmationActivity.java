@@ -62,7 +62,6 @@ public class ConfirmationActivity extends AppCompatActivity {
                         break;
                 }
             }else{
-                Toast.makeText(this, tokenResponse.getToken(), Toast.LENGTH_SHORT).show();
                 Intent toHome = new Intent(this, HomeActivity.class);
                 startActivity(toHome);    
             }

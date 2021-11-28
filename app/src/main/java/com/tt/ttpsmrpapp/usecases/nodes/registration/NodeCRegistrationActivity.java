@@ -17,6 +17,7 @@ import android.util.Log;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.bluetooth.BluetoothRepository;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.fragments.BluetoothPickerFragment;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.fragments.PlantDataFragment;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
 public class NodeCRegistrationActivity extends AppCompatActivity {
@@ -40,6 +41,12 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, BluetoothPickerFragment.class, null)
                     .commit();
         }
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .setReorderingAllowed(true)
+//                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKFDKKFKD:FADSlFADSF"))
+//                    .commit();
+//        }
         if ( !viewModel.bluetoothControllerEnabled()  ) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             bluetoothEnableLauncher.launch(enableBtIntent);
