@@ -48,4 +48,15 @@
     <string name="plant_data_fragment_textview_specie_es">Selecciona la especie de la planta</string>
     <string name="plant_data_fragment_label_specie_select_es">Planta</string>
     <string name="plant_data_fragment_button">Registrar nodo</string>
+
+    <!--Button navigation for monitorization ES-->
+    <string name="menu_item_bottom_navigation_monitoring_es">Monitorizar</string>
+    <string name="menu_item_bottom_navigation_plot_es">Registro</string>
+    <string name="menu_item_bottom_navigation_log_es">Bitacora</string>
+    <string name="menu_item_bottom_navigation_info_es">Informacion</string>
+    <!--Only for child node-->
+    <string name="menu_item_bottom_navigation_np_es">Hijos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

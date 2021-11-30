@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
 import com.tt.ttpsmrpapp.usecases.session.login.Login;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
 
@@ -35,5 +36,10 @@ public class MainActivity extends AppCompatActivity {
         if (session.isLoggedIn()){
             session.endSession();
         }
+    }
+
+    public void toNodeCentralActivity (View view){
+        Intent intent = new Intent(this, NodeCentralActivity.class);
+        startActivity(intent);
     }
 }
