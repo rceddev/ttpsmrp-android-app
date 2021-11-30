@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ttpsmrpapp">
-        <activity android:name=".usecases.nodes.registration.NodeCRegistrationActivity"/>
+        <activity android:name=".usecases.monitoring.NodeCentralActivity"></activity>
+        <activity android:name=".usecases.nodes.registration.NodeCRegistrationActivity" />
         <activity android:name=".usecases.home.HomeActivity" />
         <activity
             android:name=".usecases.session.confirmation.ConfirmationActivity"
