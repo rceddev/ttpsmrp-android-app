@@ -82,6 +82,7 @@ public class PlantDataFragment extends Fragment {
         session = new Session(getContext());
         /* ViewModel */
         viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
     }
 
     @Override
@@ -90,14 +91,14 @@ public class PlantDataFragment extends Fragment {
 
         ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
 
-        viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
-
         View view = inflater.inflate(R.layout.fragment_plant_data, container, false);
+
         placePlantTextInput = (TextInputLayout) view.findViewById(R.id.text_input_place_plant);
         typePlantTextInput =(TextInputLayout) view.findViewById(R.id.text_input_type_plant);
         placePlantAutoCompleteText = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_place_plant);
         typePlantAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_type_plant);
         registerNode = view.findViewById(R.id.button_register_node_c);
+
         ArrayAdapter<String> placesSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item, getPlacesSupportedNames());
         placePlantAutoCompleteText.setAdapter(placesSupported);
 
@@ -107,24 +108,12 @@ public class PlantDataFragment extends Fragment {
         registerNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Register node
-                if (session.isLoggedIn()) {
-                    Log.d("SessionToken", session.getToken());
-                }else{
-                    Log.d("NotSessionToken", session.getToken());
-                }
-
-                Log.d("NodeName", placePlantTextInput.getEditText().getText().toString());
-                Log.d("IdBluetooth", idBluetooth);
-                Log.d("PlaceSelectedId", "ID:"+ getIdOfSelectedItem(getPlacesSupportedNames(),placePlantTextInput.getEditText().getText().toString()));
-                Log.d("PlantSelectedId", "ID:"+ getIdOfSelectedItem(getPlantsSupported(),typePlantTextInput.getEditText().getText().toString()));
                 NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
                         placePlantTextInput.getEditText().getText().toString() ,
                         String.valueOf(4));
 
                 viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
-                        //TODO: Manage erro base on code
                         switch (tokenResponse.getCode()){
                             case ApiResponseCode.IDBLUETOOTH_REPEATED:
                                 Toast.makeText(getActivity(), "Ya se ha registrado este nodo", Toast.LENGTH_SHORT).show();
@@ -143,6 +132,7 @@ public class PlantDataFragment extends Fragment {
                 } );
             }
         });
+
         return view;
     }
 

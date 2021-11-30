@@ -50,10 +50,8 @@ public class NodeCentralActivity extends AppCompatActivity {
         this.viewPager = findViewById(R.id.view_pager_2_node_c);
         viewPager.setAdapter(adapter);
 
-
         //Set bottom navigation view
         this.bottomNavigationView = findViewById(R.id.bottom_navigation_node_c);
-
 
         this.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

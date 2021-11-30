@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
@@ -13,6 +14,7 @@ import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +27,7 @@ public class NodeRepository {
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
     }
 
-    public MutableLiveData<TokenResponse> makeLoginRequest(NodeCRegisterRequest nodeCRegisterRequest, String token) {
+    public MutableLiveData<TokenResponse> registerNC(NodeCRegisterRequest nodeCRegisterRequest, String token) {
         MutableLiveData<TokenResponse> responseMutableLiveData = new MutableLiveData<>();
         apiService.registerCentralNode(nodeCRegisterRequest, token).enqueue(new Callback<TokenResponse>() {
             @Override
@@ -34,9 +36,7 @@ public class NodeRepository {
                     responseMutableLiveData.setValue(response.body());
                     Log.d("NCTokenResponse", response.body().getToken());
                 } else {
-
                     try {
-                        //Log.e("NCTokenError:",response.errorBody().string());
                         Gson gson = new Gson();
                         String responseBody = response.errorBody().string();
                         DefaultResponse errorResponse = gson.fromJson(responseBody, DefaultResponse.class);
@@ -47,15 +47,6 @@ public class NodeRepository {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    /*
-                    Gson gson = new Gson();
-                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
-                    TokenResponse errorTokenResponse = new TokenResponse();
-                    errorTokenResponse.setCode(errorResponse.getCode());
-                    responseMutableLiveData.setValue(errorTokenResponse);
-                    Log.d("NCTokenResponseError", "Error code: " + errorTokenResponse.getCode());
-
-                    */
                 }
             }
 
@@ -65,5 +56,24 @@ public class NodeRepository {
             }
         });
         return responseMutableLiveData;
+    }
+
+    public MutableLiveData<List<Plant>> getSupportedPlants(){
+        MutableLiveData<List<Plant>> listOfSupportedPlant = new MutableLiveData<>();
+
+        apiService.getSupportedPlants().enqueue(new Callback<List<Plant>>() {
+            @Override
+            public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
+                if (response.isSuccessful()){
+                    listOfSupportedPlant.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Plant>> call, Throwable t) {
+                Log.e("RequestError", "SupportedPlants=" +t.getMessage());
+            }
+        });
+
+        return listOfSupportedPlant;
     }
 }

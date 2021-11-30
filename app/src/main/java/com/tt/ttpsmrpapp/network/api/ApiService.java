@@ -1,6 +1,7 @@
 package com.tt.ttpsmrpapp.network.api;
 
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
+import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
@@ -35,4 +36,7 @@ public interface ApiService {
 
     @GET("/api/nodo_central/nodes")
     Call<List<NodeCentral>> getCentralNodes(@Header("authorization") String token);
+
+    @GET("/api/planta/planta")
+    Call<List<Plant>> getSupportedPlants();
 }
