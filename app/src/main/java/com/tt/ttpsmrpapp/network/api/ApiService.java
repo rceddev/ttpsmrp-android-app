@@ -37,6 +37,6 @@ public interface ApiService {
     @GET("/api/nodo_central/nodes")
     Call<List<NodeCentral>> getCentralNodes(@Header("authorization") String token);
 
-    @GET("/api/planta/planta")
+    @GET("/api/planta/lista")
     Call<List<Plant>> getSupportedPlants();
 }

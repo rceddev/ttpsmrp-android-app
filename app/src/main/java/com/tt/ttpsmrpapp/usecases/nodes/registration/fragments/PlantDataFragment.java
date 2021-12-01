@@ -42,15 +42,14 @@ public class PlantDataFragment extends Fragment {
     private Button registerNode;
     private InitViewModel viewModel;
 
+    private String[] supportedPlants;
+
     private NodesRegistrationViewModel viewModelNC;
 
     private Session session;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String BUNDLE_KEY_ID_BLUETOOTH = "id_bluetooth";
 
-    // TODO: Rename and change types of parameters
     private String idBluetooth;
 
     public PlantDataFragment() {
@@ -64,7 +63,6 @@ public class PlantDataFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment PlantDataFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PlantDataFragment newInstance(String param1) {
         PlantDataFragment fragment = new PlantDataFragment();
         Bundle args = new Bundle();
@@ -83,6 +81,7 @@ public class PlantDataFragment extends Fragment {
         /* ViewModel */
         viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
         viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
+
     }
 
     @Override
@@ -99,11 +98,22 @@ public class PlantDataFragment extends Fragment {
         typePlantAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_type_plant);
         registerNode = view.findViewById(R.id.button_register_node_c);
 
+        supportedPlants = new String[0];
+        ArrayAdapter<String> plantsSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item);
+        typePlantAutoCompleteTextView.setAdapter(plantsSupported);
+
         ArrayAdapter<String> placesSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item, getPlacesSupportedNames());
         placePlantAutoCompleteText.setAdapter(placesSupported);
 
-        ArrayAdapter<String> plantsSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item, getPlantsSupported());
-        typePlantAutoCompleteTextView.setAdapter(plantsSupported);
+
+        viewModelNC.getSupportedPlants().observe(getActivity(), plants -> {
+            supportedPlants = new String[plants.size()];
+            for (int i = 0; i < supportedPlants.length; i++) {
+                plantsSupported.add(String.format("%s (%s)",
+                        plants.get(i).getAlias(), plants.get(i).getScientificName()));
+            }
+            plantsSupported.notifyDataSetChanged();
+        });
 
         registerNode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,8 +138,7 @@ public class PlantDataFragment extends Fragment {
                     }else{
                         setTemporalToken(tokenResponse.getToken());
                     }
-
-                } );
+                });
             }
         });
 
@@ -147,14 +156,7 @@ public class PlantDataFragment extends Fragment {
         return placessSuported;
     }
 
-    private String[] getPlantsSupported(){
-        //TODO: Get the plants supported from API
-        String[] plantsSuported = {"Jitomate", "Lechuga", "Rabano", "Zanahoria", "Papa"};
-        return plantsSuported;
-    }
-
     private int getIdOfSelectedItem(String[] arr, String key){
-        //TODO: Change the way the selected item is got
         for (int i = 0; i < arr.length; i++) {
             if (key.equals(arr[i])){
                 return i;

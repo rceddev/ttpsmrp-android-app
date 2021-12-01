@@ -25,6 +25,7 @@ public class NodesRegistrationViewModel extends AndroidViewModel {
         repository = new NodeRepository(application);
         if (supportedPlants == null ) {
             supportedPlants = new MutableLiveData<>();
+            loadSupportedPlants();
         }
 
     }

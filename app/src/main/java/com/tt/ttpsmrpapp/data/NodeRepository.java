@@ -66,6 +66,7 @@ public class NodeRepository {
             public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                 if (response.isSuccessful()){
                     listOfSupportedPlant.setValue(response.body());
+                    Log.d("SuppertedPlants", "Received:"+listOfSupportedPlant.getValue().size());
                 }
             }
             @Override
