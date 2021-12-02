@@ -1,6 +1,7 @@
 package com.tt.ttpsmrpapp.network.api;
 
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
+import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
@@ -30,9 +31,12 @@ public interface ApiService {
     @POST("api/usuario/validate")
     Call<TokenResponse> confirmCode(@Body ConfirmCodeRequest confirmCodeRequest);
 
-    @POST("/api/nodo_central/register")
+    @POST("api/nodo_central/register")
     Call<TokenResponse> registerCentralNode(@Body NodeCRegisterRequest registerNodoCRequest, @Header("authorization") String token);
 
-    @GET("/api/nodo_central/nodes")
+    @GET("api/nodo_central/nodes")
     Call<List<NodeCentral>> getCentralNodes(@Header("authorization") String token);
+
+    @GET("api/planta/lista")
+    Call<List<Plant>> getSupportedPlants();
 }

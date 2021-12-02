@@ -33,10 +33,10 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        /* ViewModel */
+        // ViewModel
         viewModel = new ViewModelProvider(this).get(InitViewModel.class);
         viewModel.setBluetoothRepository(new BluetoothRepository());
-        /* Check BT, only add the fragment when BT controller is enabled */
+        /// Check BT, only add the fragment when BT controller is enabled
         if ( !viewModel.bluetoothControllerEnabled()  ) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -56,13 +56,12 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
                         }
             }).launch(enableBtIntent);
         } else {
-            /* Fragment */
             addBluetoothPickerFragment(savedInstanceState);
         }
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .setReorderingAllowed(true)
-//                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKFDKKFKD:FADSlFADSF"))
+//                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("D:FADSPlFADSF"))
 //                    .commit();
 //        }
     }

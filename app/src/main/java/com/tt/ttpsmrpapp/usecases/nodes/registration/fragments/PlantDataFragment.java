@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
@@ -27,6 +28,8 @@ import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,16 +44,15 @@ public class PlantDataFragment extends Fragment {
     private AutoCompleteTextView typePlantAutoCompleteTextView;
     private Button registerNode;
     private InitViewModel viewModel;
+    private List<Plant> listPlants;
+    private String[] supportedPlants;
 
     private NodesRegistrationViewModel viewModelNC;
 
     private Session session;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String BUNDLE_KEY_ID_BLUETOOTH = "id_bluetooth";
 
-    // TODO: Rename and change types of parameters
     private String idBluetooth;
 
     public PlantDataFragment() {
@@ -64,7 +66,6 @@ public class PlantDataFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment PlantDataFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PlantDataFragment newInstance(String param1) {
         PlantDataFragment fragment = new PlantDataFragment();
         Bundle args = new Bundle();
@@ -80,8 +81,10 @@ public class PlantDataFragment extends Fragment {
             idBluetooth = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH);
         }
         session = new Session(getContext());
-        /* ViewModel */
+        // ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
+
     }
 
     @Override
@@ -90,41 +93,51 @@ public class PlantDataFragment extends Fragment {
 
         ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
 
-        viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
-
         View view = inflater.inflate(R.layout.fragment_plant_data, container, false);
+
         placePlantTextInput = (TextInputLayout) view.findViewById(R.id.text_input_place_plant);
         typePlantTextInput =(TextInputLayout) view.findViewById(R.id.text_input_type_plant);
         placePlantAutoCompleteText = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_place_plant);
         typePlantAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_type_plant);
         registerNode = view.findViewById(R.id.button_register_node_c);
+
+        supportedPlants = new String[0];
+        ArrayAdapter<String> plantsSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item);
+        typePlantAutoCompleteTextView.setAdapter(plantsSupported);
+
         ArrayAdapter<String> placesSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item, getPlacesSupportedNames());
         placePlantAutoCompleteText.setAdapter(placesSupported);
 
-        ArrayAdapter<String> plantsSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item, getPlantsSupported());
-        typePlantAutoCompleteTextView.setAdapter(plantsSupported);
+
+        viewModelNC.getSupportedPlants().observe(getActivity(), plants -> {
+            supportedPlants = new String[plants.size()];
+            listPlants = plants;
+            for (int i = 0; i < supportedPlants.length; i++) {
+                supportedPlants[i] = String.format("%s (%s)",
+                        plants.get(i).getAlias(), plants.get(i).getScientificName());
+                plantsSupported.add(String.format("%s (%s)",
+                        plants.get(i).getAlias(), plants.get(i).getScientificName()));
+            }
+            plantsSupported.notifyDataSetChanged();
+        });
 
         registerNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Register node
-                if (session.isLoggedIn()) {
-                    Log.d("SessionToken", session.getToken());
-                }else{
-                    Log.d("NotSessionToken", session.getToken());
-                }
 
-                Log.d("NodeName", placePlantTextInput.getEditText().getText().toString());
-                Log.d("IdBluetooth", idBluetooth);
-                Log.d("PlaceSelectedId", "ID:"+ getIdOfSelectedItem(getPlacesSupportedNames(),placePlantTextInput.getEditText().getText().toString()));
-                Log.d("PlantSelectedId", "ID:"+ getIdOfSelectedItem(getPlantsSupported(),typePlantTextInput.getEditText().getText().toString()));
+                int idPlantaSelected = getIdOfSelectedItem(supportedPlants,
+                        typePlantTextInput.getEditText().getText().toString());
+
+                Log.d("IdBlutooth", idBluetooth);
+                Log.d("IdPlanta", ""+ listPlants.get(idPlantaSelected).getIdPlant());
+                Log.d("Place", placePlantTextInput.getEditText().getText().toString() );
+
                 NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
                         placePlantTextInput.getEditText().getText().toString() ,
-                        String.valueOf(4));
+                        String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
 
-                viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
+                viewModelNC.makeLoginRequest(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
-                        //TODO: Manage erro base on code
                         switch (tokenResponse.getCode()){
                             case ApiResponseCode.IDBLUETOOTH_REPEATED:
                                 Toast.makeText(getActivity(), "Ya se ha registrado este nodo", Toast.LENGTH_SHORT).show();
@@ -139,10 +152,10 @@ public class PlantDataFragment extends Fragment {
                     }else{
                         setTemporalToken(tokenResponse.getToken());
                     }
-
-                } );
+                });
             }
         });
+
         return view;
     }
 
@@ -157,14 +170,7 @@ public class PlantDataFragment extends Fragment {
         return placessSuported;
     }
 
-    private String[] getPlantsSupported(){
-        //TODO: Get the plants supported from API
-        String[] plantsSuported = {"Jitomate", "Lechuga", "Rabano", "Zanahoria", "Papa"};
-        return plantsSuported;
-    }
-
     private int getIdOfSelectedItem(String[] arr, String key){
-        //TODO: Change the way the selected item is got
         for (int i = 0; i < arr.length; i++) {
             if (key.equals(arr[i])){
                 return i;
