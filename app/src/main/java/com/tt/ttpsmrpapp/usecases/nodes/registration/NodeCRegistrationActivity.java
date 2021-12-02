@@ -61,7 +61,7 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKNFDKKFKD:FADSlFADSF"))
+                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("DKNKKKKFDKKFKD:FADSlFADSF"))
                     .commit();
         }
     }

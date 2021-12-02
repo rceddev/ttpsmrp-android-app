@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
@@ -27,6 +28,8 @@ import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +44,7 @@ public class PlantDataFragment extends Fragment {
     private AutoCompleteTextView typePlantAutoCompleteTextView;
     private Button registerNode;
     private InitViewModel viewModel;
-
+    private List<Plant> listPlants;
     private String[] supportedPlants;
 
     private NodesRegistrationViewModel viewModelNC;
@@ -79,7 +82,7 @@ public class PlantDataFragment extends Fragment {
         }
         session = new Session(getContext());
         /* ViewModel */
-        viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        //viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
         viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
 
     }
@@ -108,7 +111,10 @@ public class PlantDataFragment extends Fragment {
 
         viewModelNC.getSupportedPlants().observe(getActivity(), plants -> {
             supportedPlants = new String[plants.size()];
+            listPlants = plants;
             for (int i = 0; i < supportedPlants.length; i++) {
+                supportedPlants[i] = String.format("%s (%s)",
+                        plants.get(i).getAlias(), plants.get(i).getScientificName());
                 plantsSupported.add(String.format("%s (%s)",
                         plants.get(i).getAlias(), plants.get(i).getScientificName()));
             }
@@ -118,9 +124,17 @@ public class PlantDataFragment extends Fragment {
         registerNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int idPlantaSelected = getIdOfSelectedItem(supportedPlants,
+                        typePlantTextInput.getEditText().getText().toString());
+
+                Log.d("IdBlutooth", idBluetooth);
+                Log.d("IdPlanta", ""+ listPlants.get(idPlantaSelected).getIdPlant());
+                Log.d("Place", placePlantTextInput.getEditText().getText().toString() );
+
                 NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
                         placePlantTextInput.getEditText().getText().toString() ,
-                        String.valueOf(4));
+                        String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
 
                 viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
@@ -168,7 +182,7 @@ public class PlantDataFragment extends Fragment {
     private void setTemporalToken(String temporalToken){
         //TODO: This temporalToken is the provided by API. Set this token to node here
         Log.d("NCTemporalTokenResponse", temporalToken);
-        viewModel.sendTempToken(temporalToken);
+        //viewModel.sendTempToken(temporalToken);
         //TODO: Add logic to validate if the registration is complete, replace if
         boolean success = true;
         if (success){
