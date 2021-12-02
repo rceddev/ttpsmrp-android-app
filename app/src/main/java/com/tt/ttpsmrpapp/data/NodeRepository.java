@@ -27,7 +27,7 @@ public class NodeRepository {
         this.apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
     }
 
-    public MutableLiveData<TokenResponse> registerNC(NodeCRegisterRequest nodeCRegisterRequest, String token) {
+    public MutableLiveData<TokenResponse> makeLoginRequest(NodeCRegisterRequest nodeCRegisterRequest, String token) {
         MutableLiveData<TokenResponse> responseMutableLiveData = new MutableLiveData<>();
         apiService.registerCentralNode(nodeCRegisterRequest, token).enqueue(new Callback<TokenResponse>() {
             @Override

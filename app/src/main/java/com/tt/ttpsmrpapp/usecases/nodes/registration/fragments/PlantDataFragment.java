@@ -81,8 +81,8 @@ public class PlantDataFragment extends Fragment {
             idBluetooth = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH);
         }
         session = new Session(getContext());
-        /* ViewModel */
-        //viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        // ViewModel
+        viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
         viewModelNC = new ViewModelProvider (getActivity()).get(NodesRegistrationViewModel.class);
 
     }
@@ -136,7 +136,7 @@ public class PlantDataFragment extends Fragment {
                         placePlantTextInput.getEditText().getText().toString() ,
                         String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
 
-                viewModelNC.registerNC(request, session.getToken()).observe(getActivity(),tokenResponse -> {
+                viewModelNC.makeLoginRequest(request, session.getToken()).observe(getActivity(),tokenResponse -> {
                     if (tokenResponse.getCode()!=null){
                         switch (tokenResponse.getCode()){
                             case ApiResponseCode.IDBLUETOOTH_REPEATED:
@@ -182,7 +182,7 @@ public class PlantDataFragment extends Fragment {
     private void setTemporalToken(String temporalToken){
         //TODO: This temporalToken is the provided by API. Set this token to node here
         Log.d("NCTemporalTokenResponse", temporalToken);
-        //viewModel.sendTempToken(temporalToken);
+        viewModel.sendTempToken(temporalToken);
         //TODO: Add logic to validate if the registration is complete, replace if
         boolean success = true;
         if (success){
