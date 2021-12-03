@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
@@ -23,8 +24,10 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    //Views
     private RecyclerView nodeCRecyclerView;
     private HomeViewModel viewModel;
+
     private Session session;
     private ArrayList<NodeCentral> nodeCentrals;
 
@@ -41,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //Set adapter
         this.nodeCentrals = new ArrayList<>();
-        NodeCentralAdapter adapter = new NodeCentralAdapter(nodeCentrals);
+        NodeCentralAdapter adapter = new NodeCentralAdapter(nodeCentrals, this);
         this.nodeCRecyclerView.setAdapter(adapter);
         this.nodeCRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
