@@ -37,9 +37,4 @@ public class MainActivity extends AppCompatActivity {
             session.endSession();
         }
     }
-
-    public void toNodeCentralActivity (View view){
-        Intent intent = new Intent(this, NodeCentralActivity.class);
-        startActivity(intent);
-    }
 }
