@@ -2,6 +2,7 @@ package com.tt.ttpsmrpapp.usecases.monitoring;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -29,15 +30,30 @@ public class NodeCentralActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private MonitoringAdapter adapter;
     private ViewPager2 viewPager;
+    private Toolbar toolbar;
+
+    //Bundle extras
+    private String idBluetooth;
+    private String nodeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_node_central);
 
+        //Bundle extras
+        Bundle extras = getIntent().getExtras();
+        idBluetooth = extras.getString("ID_BLUETOOTH");
+        nodeName = extras.getString("NODE_NAME");
+
+        //Toolbar settings
+        this.toolbar = findViewById(R.id.toolbar_node_c);
+        toolbar.setTitle(nodeName);
+        setSupportActionBar(toolbar);
+
         //Set fragment pages
         ArrayList<Fragment> pages = new ArrayList<>();
-        pages.add(new MonitoringFragment());
+        pages.add(MonitoringFragment.newInstance(idBluetooth));
         pages.add(new PlotFragment());
         pages.add(new ChildNodesFragment());
         pages.add(new LogFragment());
