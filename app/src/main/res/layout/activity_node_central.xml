@@ -11,12 +11,13 @@
         android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar_node_c"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +39,5 @@
         app:itemIconTint="@color/bottom_navigation_item"
         app:itemTextColor="@color/bottom_navigation_item"
         app:menu="@menu/menu_bottom_navigation_node_c"/>
-
-
 
 </LinearLayout>
