@@ -1,7 +1,9 @@
 package com.tt.ttpsmrpapp.network.api;
 
+import com.tt.ttpsmrpapp.data.model.Measurement;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
+import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
@@ -35,4 +37,7 @@ public interface ApiService {
 
     @GET("/api/nodo_central/nodes")
     Call<List<NodeCentral>> getCentralNodes(@Header("authorization") String token);
+
+    @POST("api/monitor/ultimaMedicion")
+    Call<Measurement> getLastMeasurement(@Body IdBluetooth idBluetoothObj);
 }
