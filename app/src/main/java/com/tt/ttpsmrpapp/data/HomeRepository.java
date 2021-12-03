@@ -25,7 +25,7 @@ public class HomeRepository {
     }
 
     public MutableLiveData<List<NodeCentral>> getNodeCentrals(String token){
-        //mutable live date to accommodate a central node objects list
+        //Mutable live date to accommodate a central node objects list
         MutableLiveData<List<NodeCentral>> nodeCentrals = new MutableLiveData<>();
 
         //API callback
