@@ -1,5 +1,8 @@
 package com.tt.ttpsmrpapp.usecases.home.adapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
+import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
 
 import org.w3c.dom.Text;
 
@@ -20,6 +25,10 @@ import java.util.ArrayList;
 
 public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.ViewHolder> {
     private ArrayList<NodeCentral> nodeCentrals;
+    private Context context;
+
+    private static final String ID_BLUETOOTH = "ID_BLUETOOTH";
+    private static final String NODE_NAME = "NODE_NAME";
 
     public ArrayList<NodeCentral> getNodeCentrals() {
         return nodeCentrals;
@@ -29,11 +38,10 @@ public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.
         this.nodeCentrals = nodeCentrals;
     }
 
-    public NodeCentralAdapter (ArrayList<NodeCentral> nodeCentrals) {
+    public NodeCentralAdapter (ArrayList<NodeCentral> nodeCentrals, Context context) {
         this.nodeCentrals = nodeCentrals;
+        this.context = context;
     }
-
-
 
     @NonNull
     @Override
@@ -96,7 +104,10 @@ public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.
 
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(context, NodeCentralActivity.class);
+            intent.putExtra(NODE_NAME, nodeCentrals.get(getAdapterPosition()).getNodeName());
+            intent.putExtra(ID_BLUETOOTH, nodeCentrals.get(getAdapterPosition()).getIdBluetooth());
+            context.startActivity(intent);
         }
     }
 }
