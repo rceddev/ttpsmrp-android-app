@@ -2,13 +2,23 @@ package com.tt.ttpsmrpapp.usecases.monitoring.fragments;
 
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralViewModel;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
+
+import org.w3c.dom.Text;
+
+import java.util.concurrent.TimeoutException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,11 +30,19 @@ public class MonitoringFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String idBluetoothS;
+    private IdBluetooth idBluetoothObj;
+
+    // Views
+    private TextView temperatureValueTextView;
+    private TextView humidityValueTextView;
+    private TextView lightValueTextView;
+    private TextView phValueTextView;
+    private ConstraintLayout phConstraintLayout;
+
+    //ViewModel
+    private NodeCentralViewModel viewModel;
 
     public MonitoringFragment() {
         // Required empty public constructor
@@ -35,15 +53,13 @@ public class MonitoringFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MonitoringFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MonitoringFragment newInstance(String param1, String param2) {
+    public static MonitoringFragment newInstance(String param1) {
         MonitoringFragment fragment = new MonitoringFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +68,48 @@ public class MonitoringFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            idBluetoothS = getArguments().getString(ARG_PARAM1);
+            idBluetoothObj = new IdBluetooth();
+            idBluetoothObj.setIdBluetooth(idBluetoothS);
         }
+
+        //ViewModel initilation
+        this.viewModel = new ViewModelProvider(requireActivity()).get(NodeCentralViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_monitoring, container, false);
+        View view = inflater.inflate(R.layout.fragment_monitoring, container, false);
+        this.temperatureValueTextView = (TextView) view.findViewById(R.id.text_view_temperature_value);
+        this.humidityValueTextView = (TextView) view.findViewById(R.id.text_view_humidity_value);
+        this.lightValueTextView = (TextView) view.findViewById(R.id.text_view_light_value);
+        this.phValueTextView = (TextView) view.findViewById(R.id.text_view_ph_value);
+
+        this.phConstraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_card_ph);
+
+        viewModel.getLastMeasurement(idBluetoothObj).observe(requireActivity(), measurement -> {
+            //Update UI
+            if (measurement.getTemperatura() != null){
+                temperatureValueTextView.setText(String.valueOf(measurement.getTemperatura()));
+            }
+
+            if (measurement.getHumedad() != null){
+                humidityValueTextView.setText(String.valueOf(measurement.getHumedad()));
+            }
+
+            if (measurement.getLuz() != null){
+                lightValueTextView.setText(String.valueOf(measurement.getLuz()));
+            }
+
+            if (measurement.getPh() != null){
+                phConstraintLayout.setVisibility(View.VISIBLE);
+                phValueTextView.setText(String.valueOf(measurement.getPh()));
+            }
+        });
+
+        return view;
     }
 }
