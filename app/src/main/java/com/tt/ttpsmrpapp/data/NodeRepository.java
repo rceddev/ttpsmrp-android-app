@@ -6,13 +6,17 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.tt.ttpsmrpapp.data.model.Measurement;
+import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
+import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,5 +69,34 @@ public class NodeRepository {
             }
         });
         return responseMutableLiveData;
+    }
+
+    public MutableLiveData<Measurement> getLastMeasurement( IdBluetooth idBluetoothObj){
+        //Mutable live data to accommodate las measurement from node
+        MutableLiveData<Measurement> lastMeasurement = new MutableLiveData<>();
+
+        //API callback
+        apiService.getLastMeasurement(idBluetoothObj).enqueue(new Callback<Measurement>() {
+            @Override
+            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
+                if (response.isSuccessful()) {
+                    lastMeasurement.setValue(response.body());
+                    Log.d("LMeasurementRequest", "Success");
+                } else {
+                    try {
+                        Log.e("LMeasurementRequest", "Failure: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Measurement> call, Throwable t) {
+                Log.e("RequestError", "LMeasurementRequest:" + t.getMessage());
+            }
+        });
+
+        return lastMeasurement;
     }
 }
