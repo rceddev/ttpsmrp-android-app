@@ -56,7 +56,16 @@
     <string name="menu_item_bottom_navigation_info_es">Informacion</string>
     <!--Only for child node-->
     <string name="menu_item_bottom_navigation_np_es">Hijos</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Monitoring labes -->
+    <string name="monitoring_label_temperature">Temperatura</string>
+    <string name="monitoring_label_humidity">Humedad</string>
+    <string name="monitoring_label_light">Luz</string>
+    <string name="monitoring_label_ph">Ph</string>
+
 
 </resources>
