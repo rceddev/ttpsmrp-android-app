@@ -16,6 +16,9 @@ public class Plant {
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("descripcion")
+    @Expose
+    private String descripcion;
 
     public Integer getIdPlant() {
         return idPlant;
@@ -47,5 +50,13 @@ public class Plant {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
