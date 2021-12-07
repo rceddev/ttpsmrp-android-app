@@ -66,6 +66,15 @@
     <string name="monitoring_label_humidity">Humedad</string>
     <string name="monitoring_label_light">Luz</string>
     <string name="monitoring_label_ph">Ph</string>
+    <string name="monitoring_label_date">Registrada el:</string>
+    <string name="info_label_description_es">Descripción</string>
+
+    <string name="monitoring_unity_temperature">°C</string>
+    <string name="monitoring_unity_humidity">%</string>
+    <string name="monitoring_unity_light">LUX</string>
+    <string name="monitoring_unity_ph">Ph</string>
+
+
 
 
 </resources>
