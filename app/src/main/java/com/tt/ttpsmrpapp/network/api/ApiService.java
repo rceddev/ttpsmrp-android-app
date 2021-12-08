@@ -1,6 +1,7 @@
 package com.tt.ttpsmrpapp.network.api;
 
 import com.tt.ttpsmrpapp.data.model.Measurement;
+import com.tt.ttpsmrpapp.data.model.MeasurementV2;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
@@ -21,6 +22,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface ApiService {
     @POST("api/usuario/login")
@@ -44,4 +46,10 @@ public interface ApiService {
     
     @POST("api/monitor/ultimaMedicion")
     Call<Measurement> getLastMeasurement(@Body IdBluetooth idBluetoothObj);
+
+    @GET("api/monitor/medicionesRange/{idBluetooth}/{range}")
+    Call<List<MeasurementV2>> getMeasurementRange(@Path("idBluetooth") String idBluetooth, @Path("range") int range);
+
+    @GET("api/planta/planta/{idPlant}")
+    Call<Plant> getPlantById(@Path("idPlant") int idPlant);
 }

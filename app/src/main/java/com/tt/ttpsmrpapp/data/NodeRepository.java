@@ -1,12 +1,14 @@
 package com.tt.ttpsmrpapp.data;
 
 import android.app.Application;
+import android.net.PlatformVpnProfile;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.tt.ttpsmrpapp.data.model.Measurement;
+import com.tt.ttpsmrpapp.data.model.MeasurementV2;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.ApiService;
@@ -108,5 +110,62 @@ public class NodeRepository {
         });
 
         return lastMeasurement;
+    }
+
+    public MutableLiveData<List<MeasurementV2>> getLastMeasurementRange(String idBluetooth, int range){
+        //Mutable live data to accommodate las measurement from node
+        MutableLiveData<List<MeasurementV2>> lastMeasurementRange = new MutableLiveData<>();
+
+        //API callback
+        apiService.getMeasurementRange(idBluetooth, range).enqueue(new Callback<List<MeasurementV2>>() {
+            @Override
+            public void onResponse(Call<List<MeasurementV2>> call, Response<List<MeasurementV2>> response) {
+                if (response.isSuccessful()){
+                    lastMeasurementRange.setValue(response.body());
+                    Log.d("MeasurementRangeRequest", "Success");
+                }else{
+                    try {
+                        Log.e("MeasurementRangeRequest", "Failure: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MeasurementV2>> call, Throwable t) {
+                Log.e("RequestError", "LMeasurementRangeRequest:" + t.getMessage());
+            }
+        });
+
+        return lastMeasurementRange;
+    }
+
+    public MutableLiveData<Plant> getPlantById(int idPlant){
+        //MutableLiveData to allocate plant
+        MutableLiveData<Plant> plant = new MutableLiveData<>();
+
+        //API Callback
+        apiService.getPlantById(idPlant).enqueue(new Callback<Plant>() {
+            @Override
+            public void onResponse(Call<Plant> call, Response<Plant> response) {
+                if (response.isSuccessful()){
+                    plant.setValue(response.body());
+                }
+                else {
+                    try {
+                        Log.e("RequestPlantByIdt", "Failure: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Plant> call, Throwable t) {
+                Log.e("RequestError", "RequestPlantById:" + t.getMessage());
+            }
+        });
+        return plant;
     }
 }

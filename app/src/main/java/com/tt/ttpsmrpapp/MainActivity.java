@@ -37,4 +37,9 @@ public class MainActivity extends AppCompatActivity {
             session.endSession();
         }
     }
+
+    public void toMonitorign(View view){
+        Intent intent = new Intent(this, NodeCentralActivity.class);
+        startActivity(intent);
+    }
 }

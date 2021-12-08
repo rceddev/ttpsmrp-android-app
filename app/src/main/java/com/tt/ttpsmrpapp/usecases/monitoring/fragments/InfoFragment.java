@@ -3,12 +3,22 @@ package com.tt.ttpsmrpapp.usecases.monitoring.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.tt.ttpsmrpapp.R;
+import com.tt.ttpsmrpapp.data.model.Plant;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralViewModel;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,14 +27,19 @@ import com.tt.ttpsmrpapp.R;
  */
 public class InfoFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // the fragment initialization parameters
+    private static final String ID_PLANT = "ID_PLANT";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //ViewModel
+    private NodeCentralViewModel viewModel;
+
+    //View
+    private ImageView imageViewTitle;
+    private TextView plantAliasTextView;
+    private TextView plantScientificNameTextView;
+    private TextView plantDescTextView;
+
+    private int idPlant;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -34,16 +49,13 @@ public class InfoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param idPlant Parameter 1.
      * @return A new instance of fragment InfoFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static InfoFragment newInstance(String param1, String param2) {
+    public static InfoFragment newInstance(int idPlant) {
         InfoFragment fragment = new InfoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ID_PLANT, idPlant);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +64,41 @@ public class InfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.idPlant = getArguments().getInt(ID_PLANT);
         }
+
+        //ViewModel initiation
+        this.viewModel = new ViewModelProvider(requireActivity()).get(NodeCentralViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_info, container, false);
+
+        this.imageViewTitle = (ImageView) view.findViewById(R.id.image_view_info_title);
+        this.plantAliasTextView = (TextView) view.findViewById(R.id.text_view_info_name);
+        this.plantScientificNameTextView = (TextView) view.findViewById(R.id.text_view_info_sc_name);
+        this.plantDescTextView = (TextView) view.findViewById(R.id.text_view_info_desc);
+
+        viewModel.getPlantById(idPlant).observe(requireActivity(), plant -> {
+            if (plant != null){
+                updateInfoPlant(plant);
+            }
+        });
+
+        return view;
+    }
+
+    private void updateInfoPlant(Plant plant) {
+        plantAliasTextView.setText(plant.getAlias());
+        plantScientificNameTextView.setText(plant.getScientificName());
+        plantDescTextView.setText(plant.getDescripcion()!=null ? plant.getDescripcion() : "NA");
+        Picasso.get()
+                .load(plant.getUrl())
+                .resize(3000, 1000)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .centerCrop().into(imageViewTitle);
     }
 }

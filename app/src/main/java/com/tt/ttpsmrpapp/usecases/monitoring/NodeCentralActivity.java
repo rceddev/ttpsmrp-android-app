@@ -35,6 +35,7 @@ public class NodeCentralActivity extends AppCompatActivity {
     //Bundle extras
     private String idBluetooth;
     private String nodeName;
+    private int idPlant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class NodeCentralActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         idBluetooth = extras.getString("ID_BLUETOOTH");
         nodeName = extras.getString("NODE_NAME");
+        idPlant = extras.getInt("ID_PLANT");
 
         //Toolbar settings
         this.toolbar = findViewById(R.id.toolbar_node_c);
@@ -54,10 +56,10 @@ public class NodeCentralActivity extends AppCompatActivity {
         //Set fragment pages
         ArrayList<Fragment> pages = new ArrayList<>();
         pages.add(MonitoringFragment.newInstance(idBluetooth));
-        pages.add(new PlotFragment());
+        pages.add(PlotFragment.newInstance(idBluetooth));
         pages.add(new ChildNodesFragment());
-        pages.add(new LogFragment());
-        pages.add(new InfoFragment());
+        pages.add(LogFragment.newInstance(idBluetooth));
+        pages.add(InfoFragment.newInstance(idPlant));
 
         //Set adapter
         this.adapter = new MonitoringAdapter(getSupportFragmentManager(), getLifecycle(), pages);

@@ -29,6 +29,7 @@ public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.
 
     private static final String ID_BLUETOOTH = "ID_BLUETOOTH";
     private static final String NODE_NAME = "NODE_NAME";
+    private static final String ID_PLANT = "ID_PLANT";
 
     public ArrayList<NodeCentral> getNodeCentrals() {
         return nodeCentrals;
@@ -107,6 +108,7 @@ public class NodeCentralAdapter extends RecyclerView.Adapter<NodeCentralAdapter.
             Intent intent = new Intent(context, NodeCentralActivity.class);
             intent.putExtra(NODE_NAME, nodeCentrals.get(getAdapterPosition()).getNodeName());
             intent.putExtra(ID_BLUETOOTH, nodeCentrals.get(getAdapterPosition()).getIdBluetooth());
+            intent.putExtra(ID_PLANT, nodeCentrals.get(getAdapterPosition()).getIdPlant());
             context.startActivity(intent);
         }
     }

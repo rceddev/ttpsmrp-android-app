@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/page_node_c_log"
-        android:title="@string/menu_item_bottom_navigation_monitoring_es"
+        android:title="@string/menu_item_bottom_navigation_log_es"
         android:enabled="true"
         android:icon="@drawable/ic_log_icon_menu_item">
     </item>
