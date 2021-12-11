@@ -14,6 +14,8 @@ import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
+import com.tt.ttpsmrpapp.network.api.body.DefaultResponse2;
+import com.tt.ttpsmrpapp.network.api.body.DiscoverRequest;
 import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
@@ -170,24 +172,35 @@ public class NodeRepository {
         return plant;
     }
 
-    public MutableLiveData<> registerChildNode(NodeRegisterRequest request, String token) {
-        MutableLiveData<TokenResponse> responseNR = new MutableLiveData<>();
-        apiService.registerNode(request, token).enqueue(new Callback<TokenResponse>() {
+    public MutableLiveData<DefaultResponse> registerChildNode(NodeRegisterRequest request, String token) {
+        MutableLiveData<DefaultResponse> responseNR = new MutableLiveData<>();
+        apiService.registerNode(request, token).enqueue(new Callback<DefaultResponse>() {
             @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                if (response.isSuccessful()) {
-                    responseNR.setValue(response.body());
-                    Log.d("NCTokenResponse", response.body().getToken());
-                } else {
-                    //TODO: Manage error response if its necessary
-                }
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                responseNR.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
-                Log.e("RequestErrorNC", t.getMessage());
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.e("RequestErrorRegisterN", t.getMessage());
             }
         });
         return responseNR;
+    }
+
+    public MutableLiveData<DefaultResponse2> discoveryRequest(DiscoverRequest request) {
+        MutableLiveData<DefaultResponse2> responseDiscovery = new MutableLiveData<>();
+        apiService.discovery(request).enqueue(new Callback<DefaultResponse2>() {
+            @Override
+            public void onResponse(Call<DefaultResponse2> call, Response<DefaultResponse2> response) {
+                responseDiscovery.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse2> call, Throwable t) {
+                Log.e("RequestErrorRegisterN", t.getMessage());
+            }
+        });
+        return responseDiscovery;
     }
 }

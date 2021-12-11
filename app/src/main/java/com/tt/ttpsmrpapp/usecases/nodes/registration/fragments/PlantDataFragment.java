@@ -24,6 +24,7 @@ import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
@@ -185,7 +186,21 @@ public class PlantDataFragment extends Fragment {
                     NodeRegisterRequest nodeRegisterRequest = new NodeRegisterRequest(idBluetooth,
                             idBluetoothNC, String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
 
-                    //TODO: add viewmodel method registerNode registerChildNode
+
+                    viewModelNC.registerChildNode(nodeRegisterRequest, session.getToken()).observe(getActivity(),
+                            defaultResponse -> {
+                                if (defaultResponse!=null){
+                                    if (defaultResponse.getCode() != null &&
+                                        defaultResponse.getCode().equals("1007")){
+                                        Intent  intent = new Intent(getContext(), NodeCentralActivity.class);
+                                        startActivity(intent);
+                                    }else{
+                                        Toast.makeText(getContext(), "Error al registrar Nodo " +
+                                                defaultResponse.getCode(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
                 }
             }
         });
