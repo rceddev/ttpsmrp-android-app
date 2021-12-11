@@ -1,8 +1,6 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration;
 
 import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,23 +12,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.bluetooth.BluetoothRepository;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.fragments.BluetoothPickerFragment;
-import com.tt.ttpsmrpapp.usecases.nodes.registration.fragments.PlantDataFragment;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
-public class NodeCRegistrationActivity extends AppCompatActivity {
+public class NodeRegistrationActivity extends AppCompatActivity {
 
-    public static final String TAG = NodeCRegistrationActivity.class.getSimpleName();
+    public static final String TAG = NodeRegistrationActivity.class.getSimpleName();
     private InitViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_c_registration);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_node_registration);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_nr);
         setSupportActionBar(myToolbar);
 
         // ViewModel
@@ -54,16 +51,10 @@ public class NodeCRegistrationActivity extends AppCompatActivity {
                                         result.getResultCode()));
                                 break;
                         }
-            }).launch(enableBtIntent);
+                    }).launch(enableBtIntent);
         } else {
             addBluetoothPickerFragment(savedInstanceState);
         }
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .setReorderingAllowed(true)
-//                    .add(R.id.fragment_container_view, PlantDataFragment.newInstance("D:FADSPlFADSF"))
-//                    .commit();
-//        }
     }
 
     private void addBluetoothPickerFragment(Bundle savedInstanceState) {

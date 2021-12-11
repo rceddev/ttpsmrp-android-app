@@ -10,6 +10,7 @@ import com.tt.ttpsmrpapp.data.NodeRepository;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class NodesRegistrationViewModel extends AndroidViewModel {
 
     public MutableLiveData<TokenResponse> makeLoginRequest(NodeCRegisterRequest request, String token) {
         return repository.makeLoginRequest(request, token);
+    }
+
+    public MutableLiveData<> registerChildNode(NodeRegisterRequest request, String token){
+        return repository.registerChildNode(request, token);
     }
 
     public MutableLiveData<List<Plant>> getSupportedPlants(){
