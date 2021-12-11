@@ -113,7 +113,7 @@ public class PlotFragment extends Fragment {
         this.lineChartPh = (LineChart) view.findViewById(R.id.chart_ph);
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_plot);
 
-        viewModel.getLastMeasurementRange(idBluetooth, 0).observe(requireActivity(), measurementV2s -> {
+        viewModel.getLastMeasurementRange(idBluetooth, 1).observe(requireActivity(), measurementV2s -> {
             //Update UI
             List<Entry> entriesTemperature = new ArrayList<Entry>();
             List<Entry> entriesHumidity = new ArrayList<Entry>();
@@ -200,7 +200,7 @@ public class PlotFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //Refresh the data from the last measurement
-                viewModel.refreshLastMeasurementRange(idBluetooth, 0);
+                viewModel.refreshLastMeasurementRange(idBluetooth, 1);
 
                 /*If the data is exactly the same, it will never set refreshLayout state to false,
                   so a tread is created to set refreshing state to false 4s later*/
