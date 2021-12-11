@@ -54,8 +54,10 @@ public class BluetoothPickerFragment extends Fragment {
 
     // the fragment initialization parameters
     private static final String NODE_TYPE = "NODE_TYPE";
+    private static final String ID_BLUETOOTH = "ID_BLUETOOTH";
 
     private String nodeType;
+    private String idBluetoothCentral;
 
     public BluetoothPickerFragment() {
         // Required empty public constructor
@@ -76,12 +78,32 @@ public class BluetoothPickerFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param nodeType Parameter 1.
+     * @param idBluetooth Parameter 2.
+     * @return A new instance of fragment BluetoothPickerFragment.
+     */
+    public static BluetoothPickerFragment newInstance(String nodeType, String idBluetooth) {
+        BluetoothPickerFragment fragment = new BluetoothPickerFragment();
+        Bundle args = new Bundle();
+        args.putString(NODE_TYPE, nodeType);
+        args.putString(ID_BLUETOOTH, idBluetooth);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             this.nodeType = getArguments().getString(NODE_TYPE);
+            if (this.nodeType == TYPE_SLAVE){
+               this.idBluetoothCentral = getArguments().getString(ID_BLUETOOTH);
+            }
         }
     }
 
@@ -123,7 +145,12 @@ public class BluetoothPickerFragment extends Fragment {
     private void connectToBluetoohDevice(BluetoothDevice btDevice) {
 
         Toast.makeText(getContext(), String.format("Conectando a %s", btDevice.getName()), Toast.LENGTH_SHORT).show();
-        viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI);
+        if (nodeType == TYPE_CENTRAL){
+            viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI);
+        }else{
+            //TODO: Logic for connecto to child node here
+        }
+
         macAddress = btDevice.getAddress();
 
         buttonBluetoothNext.setEnabled(true);
@@ -140,8 +167,8 @@ public class BluetoothPickerFragment extends Fragment {
         }else {
             getParentFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container_view, WifiConfigFragment.newInstance(macAddress))
-                    .addToBackStack("wifi")
+                    .replace(R.id.fragment_container_view, PlantDataFragment.newInstance(macAddress, idBluetoothCentral))
+                    .addToBackStack("plant")
                     .commit();
         }
     }

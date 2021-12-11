@@ -16,6 +16,7 @@ import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 
 import java.io.IOException;
@@ -167,5 +168,26 @@ public class NodeRepository {
             }
         });
         return plant;
+    }
+
+    public MutableLiveData<> registerChildNode(NodeRegisterRequest request, String token) {
+        MutableLiveData<TokenResponse> responseNR = new MutableLiveData<>();
+        apiService.registerNode(request, token).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                if (response.isSuccessful()) {
+                    responseNR.setValue(response.body());
+                    Log.d("NCTokenResponse", response.body().getToken());
+                } else {
+                    //TODO: Manage error response if its necessary
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                Log.e("RequestErrorNC", t.getMessage());
+            }
+        });
+        return responseNR;
     }
 }

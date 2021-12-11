@@ -8,6 +8,7 @@ import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
@@ -52,4 +53,7 @@ public interface ApiService {
 
     @GET("api/planta/planta/{idPlant}")
     Call<Plant> getPlantById(@Path("idPlant") int idPlant);
+
+    @POST("api/nodo_periferico/register")
+    Call<> registerNode(@Body NodeRegisterRequest registerRequest, String token);
 }
