@@ -5,6 +5,8 @@ import com.tt.ttpsmrpapp.data.model.MeasurementV2;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
+import com.tt.ttpsmrpapp.network.api.body.DefaultResponse2;
+import com.tt.ttpsmrpapp.network.api.body.DiscoverRequest;
 import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
@@ -55,5 +57,8 @@ public interface ApiService {
     Call<Plant> getPlantById(@Path("idPlant") int idPlant);
 
     @POST("api/nodo_periferico/register")
-    Call<> registerNode(@Body NodeRegisterRequest registerRequest, String token);
+    Call<DefaultResponse> registerNode(@Body NodeRegisterRequest registerRequest, String token);
+
+    @POST("api/nodo_sensores/discover")
+    Call<DefaultResponse2> discovery(@Body DiscoverRequest discover);
 }

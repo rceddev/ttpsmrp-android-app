@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,12 +26,16 @@ import android.widget.Toast;
 
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.esp32.ESP32Defs;
+import com.tt.ttpsmrpapp.network.api.body.DiscoverRequest;
 import com.tt.ttpsmrpapp.network.bluetooth.Result;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.BluetoothListAdapter;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeRegistrationActivity;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 
 import javax.security.auth.login.LoginException;
@@ -51,6 +56,7 @@ public class BluetoothPickerFragment extends Fragment {
     private RecyclerView bluetoothRecyclerView;
     private String macAddress;
     private InitViewModel viewModel;
+    private NodesRegistrationViewModel viewModelN;
 
     // the fragment initialization parameters
     private static final String NODE_TYPE = "NODE_TYPE";
@@ -110,8 +116,12 @@ public class BluetoothPickerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (nodeType == TYPE_CENTRAL){
+            ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.bt_toolbar_title_es);
+        }else{
+            ((NodeRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.bt_toolbar_title_es);
+        }
 
-        ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.bt_toolbar_title_es);
 
         View view = inflater.inflate(R.layout.fragment_bluetooth_picker, container, false);
         buttonBluetoothNext = view.findViewById(R.id.button6);
@@ -119,6 +129,7 @@ public class BluetoothPickerFragment extends Fragment {
 
         // ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
+        viewModelN = new ViewModelProvider(requireActivity()).get(NodesRegistrationViewModel.class);
 
         // Adapter
         ArrayList<BluetoothDevice> pairedBthDevices = viewModel.getPairedDevices();
@@ -143,18 +154,32 @@ public class BluetoothPickerFragment extends Fragment {
     }
 
     private void connectToBluetoohDevice(BluetoothDevice btDevice) {
-
+        boolean connectionOk = true;
         Toast.makeText(getContext(), String.format("Conectando a %s", btDevice.getName()), Toast.LENGTH_SHORT).show();
         if (nodeType == TYPE_CENTRAL){
             viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI);
         }else{
             //TODO: Logic for connecto to child node here
+
         }
 
+        if (connectionOk && nodeType == TYPE_SLAVE){
+            //TODO instaceId here
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
+            Random rnd = new Random();
+            StringBuilder sb = new StringBuilder(16);
+            for (int i = 0; i < 16; i++)
+                sb.append(chars.charAt(rnd.nextInt(chars.length())));
+            String instanceId = sb.toString();
+
+            viewModelN.discoveryRequest(new DiscoverRequest(idBluetoothCentral,
+                    macAddress, instanceId)).observe(requireActivity(),defaultResponse2 -> {
+                        if ((defaultResponse2 != null) && (defaultResponse2.getMessage().equals("ok"))){
+                            buttonBluetoothNext.setEnabled(true);
+                        }
+            });
+        }
         macAddress = btDevice.getAddress();
-
-        buttonBluetoothNext.setEnabled(true);
-
     }
 
     public void toNextConfigFragment() {

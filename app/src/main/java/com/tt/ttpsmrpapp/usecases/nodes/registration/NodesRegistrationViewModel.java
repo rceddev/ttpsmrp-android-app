@@ -8,6 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.tt.ttpsmrpapp.data.NodeRepository;
 import com.tt.ttpsmrpapp.data.model.Plant;
+import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
+import com.tt.ttpsmrpapp.network.api.body.DefaultResponse2;
+import com.tt.ttpsmrpapp.network.api.body.DiscoverRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
@@ -35,8 +38,12 @@ public class NodesRegistrationViewModel extends AndroidViewModel {
         return repository.makeLoginRequest(request, token);
     }
 
-    public MutableLiveData<> registerChildNode(NodeRegisterRequest request, String token){
+    public MutableLiveData<DefaultResponse> registerChildNode(NodeRegisterRequest request, String token){
         return repository.registerChildNode(request, token);
+    }
+
+    public MutableLiveData<DefaultResponse2> discoveryRequest(DiscoverRequest request){
+        return repository.discoveryRequest(request);
     }
 
     public MutableLiveData<List<Plant>> getSupportedPlants(){

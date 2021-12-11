@@ -22,6 +22,7 @@ public class NodeRegistrationActivity extends AppCompatActivity {
     public static final String TAG = NodeRegistrationActivity.class.getSimpleName();
     private InitViewModel viewModel;
 
+    private String idBluetooth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,10 @@ public class NodeRegistrationActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_nr);
         setSupportActionBar(myToolbar);
+
+        //Bundle extras
+        Bundle extras = getIntent().getExtras();
+        idBluetooth = extras.getString("ID_BLUETOOTH");
 
         // ViewModel
         viewModel = new ViewModelProvider(this).get(InitViewModel.class);
@@ -61,7 +66,7 @@ public class NodeRegistrationActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, BluetoothPickerFragment.newInstance(BluetoothPickerFragment.TYPE_CENTRAL))
+                    .add(R.id.fragment_container_view_nr, BluetoothPickerFragment.newInstance(BluetoothPickerFragment.TYPE_SLAVE, idBluetooth))
                     .commit();
         }
     }
