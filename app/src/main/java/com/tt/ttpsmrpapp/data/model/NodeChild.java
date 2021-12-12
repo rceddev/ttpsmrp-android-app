@@ -19,6 +19,9 @@ public class NodeChild {
     @SerializedName("scientificName")
     @Expose
     private String scientificName;
+    @SerializedName("IdPlant")
+    @Expose
+    private Integer idPlant;
 
     public String getIdBluetooth() {
         return idBluetooth;
@@ -60,4 +63,11 @@ public class NodeChild {
         this.scientificName = scientificName;
     }
 
+    public Integer getIdPlant() {
+        return idPlant;
+    }
+
+    public void setIdPlant(Integer idPlant) {
+        this.idPlant = idPlant;
+    }
 }
