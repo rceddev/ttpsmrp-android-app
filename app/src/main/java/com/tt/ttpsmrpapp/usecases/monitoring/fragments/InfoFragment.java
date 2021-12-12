@@ -97,7 +97,7 @@ public class InfoFragment extends Fragment {
         plantDescTextView.setText(plant.getDescripcion()!=null ? plant.getDescripcion() : "NA");
         Picasso.get()
                 .load(plant.getUrl())
-                .resize(3000, 1000)
+                .resize(3500, 1500)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .centerCrop().into(imageViewTitle);
     }

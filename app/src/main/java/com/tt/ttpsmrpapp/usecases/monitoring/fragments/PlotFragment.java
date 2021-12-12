@@ -21,6 +21,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
@@ -263,6 +264,7 @@ public class PlotFragment extends Fragment {
         //XY Axis
         yAxisLeft.setDrawGridLines(true);
         yAxisRight.setDrawGridLines(true);
+        yAxisRight.setValueFormatter(new LargeValueFormatter());
         yAxisLeft.setGridColor(getResources().getColor(R.color.plot_gridline));
         yAxisRight.setGridColor(getResources().getColor(R.color.plot_gridline));//Lineas dentro de la tabla color probablement two of them
 
