@@ -66,7 +66,7 @@ public class NodeRegistrationActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view_nr, BluetoothPickerFragment.newInstance(BluetoothPickerFragment.TYPE_SLAVE, idBluetooth))
+                    .add(R.id.fragment_container_view_nr, BluetoothPickerFragment.newInstance(BluetoothPickerFragment.TYPE_SLAVE , idBluetooth))
                     .commit();
         }
     }

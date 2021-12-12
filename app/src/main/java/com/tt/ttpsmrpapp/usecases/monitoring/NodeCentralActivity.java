@@ -57,7 +57,7 @@ public class NodeCentralActivity extends AppCompatActivity {
         ArrayList<Fragment> pages = new ArrayList<>();
         pages.add(MonitoringFragment.newInstance(idBluetooth));
         pages.add(PlotFragment.newInstance(idBluetooth));
-        pages.add(new ChildNodesFragment());
+        pages.add(ChildNodesFragment.newInstance(idBluetooth));
         pages.add(LogFragment.newInstance(idBluetooth));
         pages.add(InfoFragment.newInstance(idPlant));
 
