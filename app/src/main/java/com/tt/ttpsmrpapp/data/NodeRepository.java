@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.tt.ttpsmrpapp.data.model.Measurement;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
+import com.tt.ttpsmrpapp.data.model.NodeChild;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
@@ -202,5 +203,34 @@ public class NodeRepository {
             }
         });
         return responseDiscovery;
+    }
+
+    public MutableLiveData<List<NodeChild>> getListOfNodes(String idBlueoothNC) {
+        //Mutable live date to accommodate a central node objects list
+        MutableLiveData<List<NodeChild>> nodes = new MutableLiveData<>();
+
+        //API callback
+        apiService.getListOfNodes(idBlueoothNC).enqueue(new Callback<List<NodeChild>>() {
+            @Override
+            public void onResponse(Call<List<NodeChild>> call, Response<List<NodeChild>> response) {
+                if (response.isSuccessful()){
+                    nodes.setValue(response.body());
+                    Log.d("ListOfNodesChilds", "Success");
+                }else{
+                    try {
+                        Log.d("ListOfNodesChild", "Failure: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NodeChild>> call, Throwable t) {
+                Log.e("RequestError", t.getMessage());
+            }
+        });
+
+        return nodes;
     }
 }
