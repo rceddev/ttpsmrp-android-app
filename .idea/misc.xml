@@ -6,10 +6,14 @@
         <entry key="app/src/main/res/drawable/card_view_humidity.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.16983695652173914" />
         <entry key="app/src/main/res/layout/activity_node_c_registration.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/activity_node_central.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/layout/activity_node_child.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/activity_node_registration.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/cardview_node_central.xml" value="0.16983695652173914" />
         <entry key="app/src/main/res/layout/cardview_node_child.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_child_nodes.xml" value="0.39166666666666666" />
+        <entry key="app/src/main/res/menu/menu_bottom_navigation_node.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/menu/menu_bottom_navigation_node_c.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19074074074074074" />
       </map>
     </option>

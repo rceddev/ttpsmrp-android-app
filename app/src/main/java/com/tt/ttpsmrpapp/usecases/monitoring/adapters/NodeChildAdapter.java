@@ -1,6 +1,7 @@
 package com.tt.ttpsmrpapp.usecases.monitoring.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.NodeChild;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeChildActivity;
 
 import java.util.ArrayList;
 
 public class NodeChildAdapter extends RecyclerView.Adapter<NodeChildAdapter.ViewHolder> {
     private ArrayList<NodeChild> nodes;
     private Context context;
+
+    private static final String ID_BLUETOOTH = "ID_BLUETOOTH";
+    private static final String PLANT_NAME = "PLANT_NAME";
+    private static final String ID_PLANT = "ID_PLANT";
 
     public NodeChildAdapter (ArrayList<NodeChild> nodes, Context context) {
         this.nodes = nodes;
@@ -78,7 +85,11 @@ public class NodeChildAdapter extends RecyclerView.Adapter<NodeChildAdapter.View
 
         @Override
         public void onClick(View view) {
-
+            Intent intent = new Intent(context, NodeChildActivity.class);
+            intent.putExtra(PLANT_NAME, nodes.get(getAdapterPosition()).getAlias());
+            intent.putExtra(ID_BLUETOOTH, nodes.get(getAdapterPosition()).getIdBluetooth());
+            intent.putExtra(ID_PLANT, nodes.get(getAdapterPosition()).getIdPlant());
+            context.startActivity(intent);
         }
     }
 }
