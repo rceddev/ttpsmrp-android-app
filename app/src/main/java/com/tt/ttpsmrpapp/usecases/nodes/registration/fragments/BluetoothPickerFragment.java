@@ -201,7 +201,7 @@ public class BluetoothPickerFragment extends Fragment {
         } else {
             getParentFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container_view, PlantDataFragment.newInstance(macAddress, idBluetoothCentral))
+                    .replace(R.id.fragment_container_view_nr, PlantDataFragment.newInstance(macAddress, idBluetoothCentral))
                     .addToBackStack("plant")
                     .commit();
         }
