@@ -179,6 +179,7 @@ public class NodeRepository {
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 responseNR.setValue(response.body());
+                Log.d("NodeChildRegistration", "Success");
             }
 
             @Override
