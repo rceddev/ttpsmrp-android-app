@@ -21,9 +21,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
@@ -52,8 +55,10 @@ public class PlantDataFragment extends Fragment {
     private Session session;
 
     private static final String BUNDLE_KEY_ID_BLUETOOTH = "id_bluetooth";
+    private static final String BUNDLE_KEY_ID_BLUETOOTH_NC = "id_bluetooth_nc";
 
     private String idBluetooth;
+    private String idBluetoothNC;
 
     public PlantDataFragment() {
         // Required empty public constructor
@@ -74,11 +79,28 @@ public class PlantDataFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param idBluetoothB Parameter 1.
+     * @return A new instance of fragment PlantDataFragment.
+     */
+    public static PlantDataFragment newInstance(String idBluetoothB, String idBluetoothNodoCentral) {
+        PlantDataFragment fragment = new PlantDataFragment();
+        Bundle args = new Bundle();
+        args.putString(BUNDLE_KEY_ID_BLUETOOTH, idBluetoothB);
+        args.putString(BUNDLE_KEY_ID_BLUETOOTH_NC, idBluetoothNodoCentral);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             idBluetooth = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH);
+            idBluetoothNC = getArguments().getString(BUNDLE_KEY_ID_BLUETOOTH_NC);
         }
         session = new Session(getContext());
         // ViewModel
@@ -90,8 +112,11 @@ public class PlantDataFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        if (idBluetoothNC == null) {
+            ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        }else{
+            ((NodeRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        }
 
         View view = inflater.inflate(R.layout.fragment_plant_data, container, false);
 
@@ -100,6 +125,11 @@ public class PlantDataFragment extends Fragment {
         placePlantAutoCompleteText = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_place_plant);
         typePlantAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.auto_complete_text_type_plant);
         registerNode = view.findViewById(R.id.button_register_node_c);
+
+        if (idBluetoothNC != null){
+            placePlantTextInput.setEnabled(false);
+            placePlantAutoCompleteText.setEnabled(false);
+        }
 
         supportedPlants = new String[0];
         ArrayAdapter<String> plantsSupported = new ArrayAdapter<String>(requireContext(), R.layout.drop_menu_item);
@@ -132,27 +162,51 @@ public class PlantDataFragment extends Fragment {
                 Log.d("IdPlanta", ""+ listPlants.get(idPlantaSelected).getIdPlant());
                 Log.d("Place", placePlantTextInput.getEditText().getText().toString() );
 
-                NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
-                        placePlantTextInput.getEditText().getText().toString() ,
-                        String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
+                //Check if is a registration for NC
+                if (idBluetoothNC == null) {
+                    NodeCRegisterRequest request = new NodeCRegisterRequest(idBluetooth,
+                            placePlantTextInput.getEditText().getText().toString(),
+                            String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
 
-                viewModelNC.makeLoginRequest(request, session.getToken()).observe(getActivity(),tokenResponse -> {
-                    if (tokenResponse.getCode()!=null){
-                        switch (tokenResponse.getCode()){
-                            case ApiResponseCode.IDBLUETOOTH_REPEATED:
-                                Toast.makeText(getActivity(), "Ya se ha registrado este nodo", Toast.LENGTH_SHORT).show();
-                                break;
-                            case ApiResponseCode.NOT_EXIST_PLANT:
-                                Toast.makeText(getActivity(), "Selecciona una planta valida", Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                Toast.makeText(getActivity(), "Error inesperado: " + tokenResponse.getCode(), Toast.LENGTH_SHORT).show();
-                                break;
+                    viewModelNC.makeLoginRequest(request, session.getToken()).observe(getActivity(), tokenResponse -> {
+                        if (tokenResponse.getCode() != null) {
+                            switch (tokenResponse.getCode()) {
+                                case ApiResponseCode.IDBLUETOOTH_REPEATED:
+                                    Toast.makeText(getActivity(), "Ya se ha registrado este nodo", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case ApiResponseCode.NOT_EXIST_PLANT:
+                                    Toast.makeText(getActivity(), "Selecciona una planta valida", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(getActivity(), "Error inesperado: " + tokenResponse.getCode(), Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        } else {
+                            setTemporalToken(tokenResponse.getToken());
                         }
-                    }else{
-                        setTemporalToken(tokenResponse.getToken());
-                    }
-                });
+                    });
+                } else {
+                    // Child node registration
+                    NodeRegisterRequest nodeRegisterRequest = new NodeRegisterRequest(idBluetooth,
+                            idBluetoothNC, String.valueOf(listPlants.get(idPlantaSelected).getIdPlant()));
+
+
+                    viewModelNC.registerChildNode(nodeRegisterRequest, session.getToken()).observe(getActivity(),
+                            defaultResponse -> {
+                                if (defaultResponse!=null){
+                                    if (defaultResponse.getCode() != null &&
+                                        defaultResponse.getCode().equals("1007")){
+//                                        Intent  intent = new Intent(getContext(), NodeCentralActivity.class);
+//                                        startActivity(intent);
+                                          getActivity().finish();
+                                    }else{
+                                        Toast.makeText(getContext(), "Error al registrar Nodo " +
+                                                defaultResponse.getCode(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+                }
             }
         });
 
@@ -166,7 +220,7 @@ public class PlantDataFragment extends Fragment {
     }
 
     private String[] getPlacesSupportedNames(){
-        String[] placessSuported = {"Zotefuela", "Jardin", "Azotea", "Invernadero", "Campo"};
+        String[] placessSuported = {"Zotehuela", "Jardin", "Azotea", "Invernadero", "Campo" };
         return placessSuported;
     }
 

@@ -14,6 +14,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.google.gson.Gson;
+import com.tt.ttpsmrpapp.data.model.NodeCentral;
+import com.tt.ttpsmrpapp.data.model.User;
 import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
@@ -25,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
@@ -164,6 +167,36 @@ public class UserRepository {
             }
         });
         return tokenResponseLiveData;
+    }
+
+    public MutableLiveData<User> getUserInfo(String token){
+        //Mutable live date to accommodate a central node objects list
+        MutableLiveData<User> userInfo = new MutableLiveData<>();
+
+        //API callback
+        apiService.getUserInfo(token).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()){
+                    userInfo.setValue(response.body());
+                    Log.d("UserInfo", "Success" + response.body().getUrl());
+                }else{
+                    try {
+                        Log.d("UserInfo", "Failure: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("RequestError", t.getMessage());
+            }
+        });
+
+        return userInfo;
+
     }
 
     private void setTokenResponseLive(TokenResponse tokenResponse){

@@ -95,6 +95,7 @@ public class Login extends AppCompatActivity {
                 createNewSession(tokenResponse.getToken());
                 Intent toHome = new Intent(this, HomeActivity.class);
                 startActivity(toHome);
+                finish();
             }
         }
     }

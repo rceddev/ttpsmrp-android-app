@@ -6,17 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.usecases.monitoring.adapters.MonitoringAdapter;
-import com.tt.ttpsmrpapp.usecases.monitoring.fragments.ChildNodesFragment;
 import com.tt.ttpsmrpapp.usecases.monitoring.fragments.InfoFragment;
 import com.tt.ttpsmrpapp.usecases.monitoring.fragments.LogFragment;
 import com.tt.ttpsmrpapp.usecases.monitoring.fragments.MonitoringFragment;
@@ -24,8 +20,7 @@ import com.tt.ttpsmrpapp.usecases.monitoring.fragments.PlotFragment;
 
 import java.util.ArrayList;
 
-public class NodeCentralActivity extends AppCompatActivity {
-
+public class NodeChildActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private MonitoringAdapter adapter;
@@ -34,30 +29,30 @@ public class NodeCentralActivity extends AppCompatActivity {
 
     //Bundle extras
     private String idBluetooth;
-    private String nodeName;
+    private String plantName;
     private int idPlant;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_central);
+        setContentView(R.layout.activity_node_child);
 
         //Bundle extras
         Bundle extras = getIntent().getExtras();
         idBluetooth = extras.getString("ID_BLUETOOTH");
-        nodeName = extras.getString("NODE_NAME");
+        plantName = extras.getString("PLANT_NAME");
         idPlant = extras.getInt("ID_PLANT");
 
         //Toolbar settings
-        this.toolbar = findViewById(R.id.toolbar_node_c);
-        toolbar.setTitle(nodeName);
+        this.toolbar = findViewById(R.id.toolbar_node);
+        toolbar.setTitle(plantName);
         setSupportActionBar(toolbar);
 
         //Set fragment pages
         ArrayList<Fragment> pages = new ArrayList<>();
         pages.add(MonitoringFragment.newInstance(idBluetooth));
         pages.add(PlotFragment.newInstance(idBluetooth));
-        pages.add(ChildNodesFragment.newInstance(idBluetooth));
         pages.add(LogFragment.newInstance(idBluetooth));
         pages.add(InfoFragment.newInstance(idPlant));
 
@@ -65,11 +60,11 @@ public class NodeCentralActivity extends AppCompatActivity {
         this.adapter = new MonitoringAdapter(getSupportFragmentManager(), getLifecycle(), pages);
 
         //Set ViewPager 2
-        this.viewPager = findViewById(R.id.view_pager_2_node_c);
+        this.viewPager = findViewById(R.id.view_pager_2_node);
         viewPager.setAdapter(adapter);
 
         //Set bottom navigation view
-        this.bottomNavigationView = findViewById(R.id.bottom_navigation_node_c);
+        this.bottomNavigationView = findViewById(R.id.bottom_navigation_node);
 
         this.bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -81,14 +76,11 @@ public class NodeCentralActivity extends AppCompatActivity {
                     case R.id.page_node_c_plot:
                         viewPager.setCurrentItem(1);
                         break;
-                    case R.id.page_node_c_child_nodes:
+                    case R.id.page_node_c_log:
                         viewPager.setCurrentItem(2);
                         break;
-                    case R.id.page_node_c_log:
-                        viewPager.setCurrentItem(3);
-                        break;
                     case R.id.page_node_c_info:
-                        viewPager.setCurrentItem(4);
+                        viewPager.setCurrentItem(3);
                         break;
                 }
                 return true;
@@ -98,7 +90,6 @@ public class NodeCentralActivity extends AppCompatActivity {
         int[] bottomNavigationItems= {
                 R.id.page_node_c_monitoring,
                 R.id.page_node_c_plot,
-                R.id.page_node_c_child_nodes,
                 R.id.page_node_c_log,
                 R.id.page_node_c_info,
         };
@@ -111,6 +102,5 @@ public class NodeCentralActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
