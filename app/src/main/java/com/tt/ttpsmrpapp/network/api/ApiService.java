@@ -60,7 +60,7 @@ public interface ApiService {
     @POST("api/nodo_periferico/register")
     Call<DefaultResponse> registerNode(@Body NodeRegisterRequest registerRequest, String token);
 
-    @POST("api/nodo_sensores/register")
+    @POST("api/nodo_sensores/discover")
     Call<DefaultResponse2> discovery(@Body DiscoverRequest discover);
 
     @GET("api/nodo_sensores/nodes/{idBluetoothNodeCentral}")

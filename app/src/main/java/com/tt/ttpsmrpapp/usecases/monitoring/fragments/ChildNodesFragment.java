@@ -116,7 +116,7 @@ public class ChildNodesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), NodeRegistrationActivity.class);
-                intent.putExtra("idBluetooth", idBluetooth);
+                intent.putExtra(NodeRegistrationActivity.BLUETOOTH_ID, idBluetooth);
                 startActivity(intent);
             }
         });

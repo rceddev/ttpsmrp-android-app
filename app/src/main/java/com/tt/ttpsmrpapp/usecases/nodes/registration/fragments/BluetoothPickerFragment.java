@@ -1,5 +1,7 @@
 package com.tt.ttpsmrpapp.usecases.nodes.registration.fragments;
 
+import static com.tt.ttpsmrpapp.esp32.ESP32Status.Status.ESP_OK;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,14 +28,19 @@ import android.widget.Toast;
 
 import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.esp32.ESP32Defs;
+import com.tt.ttpsmrpapp.esp32.ESP32Message;
+import com.tt.ttpsmrpapp.esp32.ESP32Status;
 import com.tt.ttpsmrpapp.network.api.body.DiscoverRequest;
+import com.tt.ttpsmrpapp.network.bluetooth.NodoMessageTypes;
 import com.tt.ttpsmrpapp.network.bluetooth.Result;
+import com.tt.ttpsmrpapp.network.bluetooth.fsm.EnumBluetoothFSM;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.BluetoothListAdapter;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
@@ -154,32 +161,34 @@ public class BluetoothPickerFragment extends Fragment {
     }
 
     private void connectToBluetoohDevice(BluetoothDevice btDevice) {
+        macAddress = btDevice.getAddress();
         boolean connectionOk = true;
         Toast.makeText(getContext(), String.format("Conectando a %s", btDevice.getName()), Toast.LENGTH_SHORT).show();
         if (nodeType == TYPE_CENTRAL){
-            viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI);
+            viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI, null);
+            buttonBluetoothNext.setEnabled(true);
         }else{
             //TODO: Logic for connecto to child node here
-
-        }
-
-        if (connectionOk && nodeType == TYPE_SLAVE){
-            //TODO instaceId here
-            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
-            Random rnd = new Random();
-            StringBuilder sb = new StringBuilder(16);
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            Random rnd = new Random(System.currentTimeMillis());
+            char[] instanceId = new char[16];
             for (int i = 0; i < 16; i++)
-                sb.append(chars.charAt(rnd.nextInt(chars.length())));
-            String instanceId = sb.toString();
-
-            viewModelN.discoveryRequest(new DiscoverRequest(idBluetoothCentral,
-                    macAddress, instanceId)).observe(requireActivity(),defaultResponse2 -> {
-                        if ((defaultResponse2 != null) && (defaultResponse2.getMessage().equals("ok"))){
+                instanceId[i] = chars.charAt(rnd.nextInt(chars.length()));
+            macAddress = btDevice.getAddress();
+            Log.d(TAG, String.format("connectToBluetoohDevice: Conectando a %s", macAddress));
+            viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_BLE, instanceId);
+            viewModel.esp32Status.observe(getViewLifecycleOwner(), (ESP32Status message) -> {
+                if (message.initStatus == EnumBluetoothFSM.GATT_OK && message.status == ESP_OK) {
+                    Log.d(TAG, "connectToBluetoohDevice: GATT listo!");
+                    viewModelN.discoveryRequest(new DiscoverRequest(idBluetoothCentral,
+                            macAddress, new String(instanceId))).observe(requireActivity(), defaultResponse2 -> {
+                        if ((defaultResponse2 != null) && (defaultResponse2.getStatus().equals("ok"))) {
                             buttonBluetoothNext.setEnabled(true);
                         }
+                    });
+                }
             });
         }
-        macAddress = btDevice.getAddress();
     }
 
     public void toNextConfigFragment() {
@@ -189,7 +198,7 @@ public class BluetoothPickerFragment extends Fragment {
                     .replace(R.id.fragment_container_view, WifiConfigFragment.newInstance(macAddress))
                     .addToBackStack("wifi")
                     .commit();
-        }else {
+        } else {
             getParentFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.fragment_container_view, PlantDataFragment.newInstance(macAddress, idBluetoothCentral))
