@@ -13,6 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="SplashTheme" parent="Theme.Ttpsmrpapp">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+    </style>
+
+
     <style name="statusBarWithNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="l">#a8dc60</item>
     </style>
