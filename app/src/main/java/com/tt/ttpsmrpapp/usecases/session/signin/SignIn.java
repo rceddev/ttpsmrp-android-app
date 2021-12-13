@@ -25,6 +25,7 @@ import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 import com.tt.ttpsmrpapp.usecases.session.confirmation.ConfirmationActivity;
+import com.tt.ttpsmrpapp.utils.LoadingDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -51,6 +52,8 @@ public class SignIn extends AppCompatActivity {
     private EditText userEmail;
     private EditText userPass;
     private EditText userRepeatPass;
+
+    private LoadingDialog loadingDialog;
 
     private Uri imageUri;
 
@@ -94,12 +97,18 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
+        loadingDialog = new LoadingDialog(SignIn.this);
+
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                loadingDialog.startLoadingDialog();
+
                 final Observer<DefaultResponse> defaultResponseObserver = new Observer<DefaultResponse>() {
                     @Override
                     public void onChanged(DefaultResponse defaultResponse) {
+                        loadingDialog.dismissDialog();
                         manageResponse(defaultResponse);
                     }
                 };
@@ -111,14 +120,19 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void manageResponse(DefaultResponse defaultResponse) {
-        //TODO: add management of left code responses
         switch (defaultResponse.getCode()){
             case USER_REGISTERED:
                 Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
                 startActivity(toConfirmationActivity);
                 break;
+            case USERNAME_REPEATED:
+                Toast.makeText(this, "Nombre de usuario no disponible", Toast.LENGTH_SHORT).show();
+                break;
+            case EMAIL_REPEATED:
+                Toast.makeText(this, "Ya hay un usario registrado con ese correo", Toast.LENGTH_SHORT).show();
+                break;
             default:
-                Toast.makeText(this, "Salio Mal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                 break;
         }
 
