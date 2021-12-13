@@ -18,6 +18,7 @@ import com.tt.ttpsmrpapp.network.bluetooth.Result;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.utils.WifiNetWorkModel;
 
 import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class InitViewModel extends ViewModel {
     /**
      * Inicializar el proceso de conexión con el dispositivo dev
      */
-    public void initDevice(BluetoothDevice dev, ESP32Defs.DevType type) {
+    public void initDevice(BluetoothDevice dev, ESP32Defs.DevType type, char instanceId[]) {
         // TODO: Resolver cadena de callbacks
         repository.connectDevice(dev, ESP32Defs.SPP_UUID, (Result<Boolean> connected) -> {
             if (connected instanceof Result.Success) {
@@ -67,7 +68,7 @@ public class InitViewModel extends ViewModel {
                             Log.d(TAG, String.format("initDevice: [GEN_STATUS] %s", msgStatus.status));
                             esp32Status.postValue(msgStatus.status);
                         }
-                    });
+                    }, instanceId);
                 }
             } else {
                 isConnected.postValue(false);

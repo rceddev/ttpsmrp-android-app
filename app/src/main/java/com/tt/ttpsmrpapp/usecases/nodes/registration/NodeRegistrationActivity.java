@@ -17,7 +17,11 @@ import com.tt.ttpsmrpapp.network.bluetooth.BluetoothRepository;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.fragments.BluetoothPickerFragment;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 
+
 public class NodeRegistrationActivity extends AppCompatActivity {
+
+    public static final String BLUETOOTH_ID = "com.tt.ttpsmrpapp.usecases.nodes.registration." +
+            "NodeRegistrationActivity.BLUETOOTH_ID";
 
     public static final String TAG = NodeRegistrationActivity.class.getSimpleName();
     private InitViewModel viewModel;
@@ -33,7 +37,7 @@ public class NodeRegistrationActivity extends AppCompatActivity {
 
         //Bundle extras
         Bundle extras = getIntent().getExtras();
-        idBluetooth = extras.getString("ID_BLUETOOTH");
+        idBluetooth = extras.getString(BLUETOOTH_ID);
 
         // ViewModel
         viewModel = new ViewModelProvider(this).get(InitViewModel.class);

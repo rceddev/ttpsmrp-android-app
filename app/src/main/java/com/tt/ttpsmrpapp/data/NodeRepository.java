@@ -191,10 +191,12 @@ public class NodeRepository {
 
     public MutableLiveData<DefaultResponse2> discoveryRequest(DiscoverRequest request) {
         MutableLiveData<DefaultResponse2> responseDiscovery = new MutableLiveData<>();
+        Log.e("DiscoveryRequest", "Por mandar peticion");
         apiService.discovery(request).enqueue(new Callback<DefaultResponse2>() {
             @Override
             public void onResponse(Call<DefaultResponse2> call, Response<DefaultResponse2> response) {
                 responseDiscovery.setValue(response.body());
+                Log.e("DiscoveryRequest", "Success" + response.body().getStatus());
             }
 
             @Override

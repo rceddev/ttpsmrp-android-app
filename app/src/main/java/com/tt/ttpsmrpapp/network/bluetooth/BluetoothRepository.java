@@ -234,13 +234,23 @@ public class BluetoothRepository {
         });
     }
 
-    public void initDeviceBLE(RepositoryCallback<ESP32Message> callback) {
+    public void initDeviceBLE(RepositoryCallback<ESP32Message> callback, char[] instanceId) {
         executor.execute(() -> {
             //BluetoothFSM<ESP32Status> fsm = new BluetoothFSM<>(threadHandler, onConnect);
             BluetoothFSM fsm = new BluetoothFSM((state) -> callback.onMessage(state));
-            byte[] initMsg = { NodoMessageTypes.MSG_INIT_BLE };
-            write(initMsg);
-            readWithFSM(fsm);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(NodoMessageTypes.MSG_INIT_BLE);
+            if ( instanceId.length == 16 ) {
+                for (char c : instanceId) {
+                    outputStream.write(c);
+                }
+                byte[] initMsg = outputStream.toByteArray();
+                Log.d(TAG, String.format("initDeviceBLE: Enviando bytes", bytesToHex(initMsg, initMsg.length)));
+                write(initMsg);
+                readWithFSM(fsm);
+            } else {
+                Log.e(TAG, "initDeviceBLE: instanceId len != 16");
+            }
         });
     }
 
