@@ -91,7 +91,7 @@ public class LogFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager((new LinearLayoutManager(requireActivity())));
 
-        viewModel.getLastMeasurementRange(idBluetooth, 1).observe(requireActivity(), measurementV2s -> {
+        viewModel.getLastMeasurementRange(idBluetooth, 0).observe(requireActivity(), measurementV2s -> {
            measurementV2sList.clear();
             for (MeasurementV2 measure : measurementV2s){
                 this.measurementV2sList.add(measure);

@@ -90,14 +90,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (!session.isLoggedIn()){
-           finish();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home_activity, menu);
 

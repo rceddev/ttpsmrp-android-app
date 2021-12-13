@@ -145,11 +145,5 @@ public class SignIn extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!session.isLoggedIn()){
-            finish();
-        }
-    }
+
 }
