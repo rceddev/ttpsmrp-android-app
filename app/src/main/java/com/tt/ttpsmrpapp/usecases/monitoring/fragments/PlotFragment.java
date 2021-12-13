@@ -27,6 +27,7 @@ import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
 import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralViewModel;
 import com.tt.ttpsmrpapp.usecases.monitoring.utils.DataString;
+import com.tt.ttpsmrpapp.usecases.monitoring.utils.HourDataFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,8 @@ public class PlotFragment extends Fragment {
     private LineChart lineChartPh;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private List<MeasurementV2> items;
 
     public PlotFragment() {
         // Required empty public constructor
@@ -117,7 +120,7 @@ public class PlotFragment extends Fragment {
             List<Entry> entriesLight = new ArrayList<Entry>();
             List<Entry> entriesPh = new ArrayList<Entry>();
 
-            int index = 0;
+            float index = 0;
 
             for (MeasurementV2 measurementV2 : measurementV2s) {
                 entriesTemperature.add(new Entry(index,
@@ -130,6 +133,11 @@ public class PlotFragment extends Fragment {
                         measurementV2.getPh() != null ? measurementV2.getPh() : 0));
                 index++;
             }
+
+            index = 0;
+
+            //set itemList
+            items = measurementV2s;
 
             //LineData
             LineData lineDataTemp = new LineData(prepareDataSet(entriesTemperature,
@@ -167,6 +175,16 @@ public class PlotFragment extends Fragment {
             lineChartHumidity.getDescription().setEnabled(false);
             lineChartLight.getDescription().setEnabled(false);
             lineChartPh.getDescription().setEnabled(false);
+
+            Legend legendTemp = lineChartTemperature.getLegend();
+            Legend legendHum = lineChartHumidity.getLegend();
+            Legend legendLight = lineChartLight.getLegend();
+            Legend legendPH = lineChartPh.getLegend();
+
+            prepareLegend(legendTemp);
+            prepareLegend(legendHum);
+            prepareLegend(legendLight);
+            prepareLegend(legendPH);
 
             //Refresh plots
             lineChartTemperature.invalidate();
@@ -207,6 +225,14 @@ public class PlotFragment extends Fragment {
         return view;
     }
 
+    private void prepareLegend(Legend legend) {
+        legend.setTextSize(15);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+    }
+
     private LineDataSet prepareDataSet(List<Entry> entries, String plotLabel, int plotColorId){
         //Plot color
         int plotColor = getResources().getColor(plotColorId);
@@ -240,6 +266,7 @@ public class PlotFragment extends Fragment {
         //Set fill color (Area below of the curve)
         dataSet.setFillColor(plotColor);
 
+
         return dataSet;
     }
 
@@ -250,6 +277,8 @@ public class PlotFragment extends Fragment {
         xAxis.setLabelRotationAngle(-45);
         //Set if the grid lines of x axis need to be drawn
         xAxis.setDrawGridLines(false);
+        //Set time hour formater
+        xAxis.setValueFormatter(new HourDataFormatter(items));
 
         //Y Axis left only
         //Set if the grid lines of y left axis need to be drawn
@@ -264,7 +293,7 @@ public class PlotFragment extends Fragment {
         //XY Axis
         yAxisLeft.setDrawGridLines(true);
         yAxisRight.setDrawGridLines(true);
-        yAxisRight.setValueFormatter(new LargeValueFormatter());
+        //yAxisLeft.setValueFormatter(new LargeValueFormatter());
         yAxisLeft.setGridColor(getResources().getColor(R.color.plot_gridline));
         yAxisRight.setGridColor(getResources().getColor(R.color.plot_gridline));//Lineas dentro de la tabla color probablement two of them
 

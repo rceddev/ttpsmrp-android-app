@@ -48,7 +48,6 @@ public class UserRepository {
     }
 
     public MutableLiveData<TokenResponse> makeLoginRequest(LoginRequest loginRequest){
-        //TODO: Remove unnecessary comments and manage correct member variable names
         MutableLiveData<TokenResponse> tokenResponseML = new MutableLiveData<>();
         apiService.login(loginRequest).enqueue(new Callback<TokenResponse>() {
             @Override
@@ -72,49 +71,6 @@ public class UserRepository {
             }
         });
         return tokenResponseML;
-//        TokenResponse tokenResponse = new TokenResponse();
-//        try {
-//            Response<TokenResponse> response = call.execute();
-//            if (response.isSuccessful()){
-//                //setTokenResponseLive(response.body());
-//                tokenResponse = response.body();
-//                Log.e("TOKEN SUCCESS", response.body().getToken());
-//            }else{
-//                Gson gson = new Gson();
-//                DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
-//                //TokenResponse errorTokenResponse = new TokenResponse();
-//                tokenResponse = new TokenResponse();
-//                tokenResponse.setCode(errorResponse.getCode());
-//                //setTokenResponse(errorTokenResponse);
-//
-//                Log.e("REPOSITORY" ,  "Code:" +errorResponse.getCode());
-//            }
-//        }catch (IOException e){
-//            Log.e("ON_FAILURE", "Connection lost");
-//        }
-//        call.enqueue(new Callback<TokenResponse>() {
-//            @Override
-//            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-//                if (response.isSuccessful()){
-//                    setTokenResponseLive(response.body());
-//                    Log.e("TOKEN SUCCESS", response.body().getToken());
-//                }else {
-//                    Gson gson = new Gson();
-//                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
-//                    TokenResponse errorTokenResponse = new TokenResponse();
-//                    errorTokenResponse.setCode(errorResponse.getCode());
-//                    setTokenResponse(errorTokenResponse);
-//
-//                    Log.e("REPOSITORY" ,  "Code:" +errorResponse.getCode());
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<TokenResponse> call, Throwable t) {
-//                Log.e("ON_FAILURE", t.getMessage());
-//            }
-//        });
-
-//        return tokenResponse;
     }
 
     public MutableLiveData<DefaultResponse> registerUserRequest(String userName, String userEmail, String userPassword, Uri userImage, Context context){
@@ -158,16 +114,17 @@ public class UserRepository {
 
         }
 
-        ApiService apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
-        Call<DefaultResponse> call = apiService.registerUser(email, pass, name, image);
+        MutableLiveData<DefaultResponse> registerResponse = new MutableLiveData<>();
 
-        call.enqueue(new Callback<DefaultResponse>() {
+        ApiService apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
+
+        apiService.registerUser(email, pass, name, image).enqueue(new Callback<DefaultResponse>() {
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                 if (response.isSuccessful()){
                     if (response.body() != null && response.body() instanceof DefaultResponse){
-                        //setDefaultResponse(response.body());
-                        setDefaultResponseMutableLiveData(response.body());
+
+                        registerResponse.setValue(response.body());
                     }
                 }
                 else{
@@ -180,7 +137,7 @@ public class UserRepository {
                 Log.e("REGISTER_ON_FAILURE", t.getMessage());
             }
         });
-        return defaultResponseMutableLiveData;
+        return registerResponse;
     }
 
     public MutableLiveData<TokenResponse> confirmCode(ConfirmCodeRequest confirmCodeRequest) {
