@@ -26,6 +26,7 @@ import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeCRegistrationActivity;
+import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.NodesRegistrationViewModel;
 import com.tt.ttpsmrpapp.usecases.nodes.registration.viewmodel.InitViewModel;
 import com.tt.ttpsmrpapp.usecases.session.login.LoginViewModel;
@@ -111,8 +112,11 @@ public class PlantDataFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        if (idBluetoothNC == null) {
+            ((NodeCRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        }else{
+            ((NodeRegistrationActivity) getActivity()).getSupportActionBar().setTitle(R.string.plant_data_fragment_toolbar_title_es);
+        }
 
         View view = inflater.inflate(R.layout.fragment_plant_data, container, false);
 
@@ -192,8 +196,9 @@ public class PlantDataFragment extends Fragment {
                                 if (defaultResponse!=null){
                                     if (defaultResponse.getCode() != null &&
                                         defaultResponse.getCode().equals("1007")){
-                                        Intent  intent = new Intent(getContext(), NodeCentralActivity.class);
-                                        startActivity(intent);
+//                                        Intent  intent = new Intent(getContext(), NodeCentralActivity.class);
+//                                        startActivity(intent);
+                                          getActivity().finish();
                                     }else{
                                         Toast.makeText(getContext(), "Error al registrar Nodo " +
                                                 defaultResponse.getCode(), Toast.LENGTH_SHORT).show();

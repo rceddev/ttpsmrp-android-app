@@ -133,7 +133,6 @@ public class BluetoothPickerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bluetooth_picker, container, false);
         buttonBluetoothNext = view.findViewById(R.id.button6);
         bluetoothRecyclerView = view.findViewById(R.id.bluetooth_device_recycler_view);
-
         // ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(InitViewModel.class);
         viewModelN = new ViewModelProvider(requireActivity()).get(NodesRegistrationViewModel.class);
@@ -162,13 +161,11 @@ public class BluetoothPickerFragment extends Fragment {
 
     private void connectToBluetoohDevice(BluetoothDevice btDevice) {
         macAddress = btDevice.getAddress();
-        boolean connectionOk = true;
         Toast.makeText(getContext(), String.format("Conectando a %s", btDevice.getName()), Toast.LENGTH_SHORT).show();
         if (nodeType == TYPE_CENTRAL){
             viewModel.initDevice(btDevice, ESP32Defs.DevType.NODO_WIFI, null);
             buttonBluetoothNext.setEnabled(true);
         }else{
-            //TODO: Logic for connecto to child node here
             String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             Random rnd = new Random(System.currentTimeMillis());
             char[] instanceId = new char[16];
@@ -188,6 +185,7 @@ public class BluetoothPickerFragment extends Fragment {
                     });
                 }
             });
+
         }
     }
 
@@ -201,7 +199,7 @@ public class BluetoothPickerFragment extends Fragment {
         } else {
             getParentFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .replace(R.id.fragment_container_view_nr, PlantDataFragment.newInstance(macAddress, idBluetoothCentral))
+                    .replace(R.id.fragment_container_view_nr, PlantDataFragment.newInstance("macAddrlllddlllekssN", idBluetoothCentral))
                     .addToBackStack("plant")
                     .commit();
         }

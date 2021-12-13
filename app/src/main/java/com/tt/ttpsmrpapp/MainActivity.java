@@ -17,31 +17,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Ttpsmrpapp);
-
+        session = new Session(this);
+        if (!session.isLoggedIn()){
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+            finish();
+        }else {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        session = new Session(this);
-    }
 
-    public void toLogin(View view) {
-        Intent intent = new Intent(this, Login.class);
-        startActivity(intent);
-    }
-	
-    //Callback to home activity
-    public void toHome(View view) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
-    public void logout(View view) {
-        if (session.isLoggedIn()){
-            session.endSession();
-        }
-    }
-
-    public void toMonitorign(View view){
-        Intent intent = new Intent(this, NodeCentralActivity.class);
-        startActivity(intent);
     }
 }

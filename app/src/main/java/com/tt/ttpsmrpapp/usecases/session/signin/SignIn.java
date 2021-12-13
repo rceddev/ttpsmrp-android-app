@@ -25,6 +25,7 @@ import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 import com.tt.ttpsmrpapp.usecases.session.confirmation.ConfirmationActivity;
+import com.tt.ttpsmrpapp.usecases.session.management.Session;
 import com.tt.ttpsmrpapp.utils.LoadingDialog;
 
 import java.io.ByteArrayOutputStream;
@@ -57,6 +58,8 @@ public class SignIn extends AppCompatActivity {
 
     private Uri imageUri;
 
+    private Session session;
+
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
         new ActivityResultCallback<Uri>() {
             @Override
@@ -87,6 +90,9 @@ public class SignIn extends AppCompatActivity {
         this.userRepeatPass = (EditText)findViewById(R.id.edit_text_user_repeat_pass);
 
         SignInViewModel model = new ViewModelProvider(this).get(SignInViewModel.class);
+
+        //Session
+        this.session = new Session(this);
 
         //TODO: add field validation
 
@@ -119,6 +125,7 @@ public class SignIn extends AppCompatActivity {
 
     }
 
+
     private void manageResponse(DefaultResponse defaultResponse) {
         switch (defaultResponse.getCode()){
             case USER_REGISTERED:
@@ -136,5 +143,13 @@ public class SignIn extends AppCompatActivity {
                 break;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!session.isLoggedIn()){
+            finish();
+        }
     }
 }

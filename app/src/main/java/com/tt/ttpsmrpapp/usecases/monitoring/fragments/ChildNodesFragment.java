@@ -8,9 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tt.ttpsmrpapp.R;
@@ -25,6 +28,7 @@ import com.tt.ttpsmrpapp.usecases.nodes.registration.NodeRegistrationActivity;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,14 +49,16 @@ public class ChildNodesFragment extends Fragment {
     //ViewModel
     private NodeChildViewModel viewModel;
 
+    //Adapter
+    private NodeChildAdapter adapter;
+
 
 
     private FloatingActionButton button;
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
-    // TODO: Rename and change types of parameters
     private String idBluetooth;
 
     public ChildNodesFragment() {
@@ -98,18 +104,22 @@ public class ChildNodesFragment extends Fragment {
         this.button = (FloatingActionButton) view.findViewById(R.id.floatingActionButton_n);
         this.listOfNodeRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_node_list);
 
+        //Label in case of empty list
+        TextView noChildTextView = (TextView)view.findViewById(R.id.textView_no_chidl);
+        ImageView noChildImageView = (ImageView)view.findViewById(R.id.imageview_no_child);
+
         //Set adapter
         this.listOfChildNodes = new ArrayList<>();
-        NodeChildAdapter adapter = new NodeChildAdapter(listOfChildNodes, getContext());
+        this.adapter = new NodeChildAdapter(listOfChildNodes, getContext());
         this.listOfNodeRecyclerView.setAdapter(adapter);
         this.listOfNodeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         viewModel.getListOfNodes(idBluetooth).observe(requireActivity(), nodeChildren -> {
-            this.listOfChildNodes.clear();
-            for (NodeChild node : nodeChildren){
-                this.listOfChildNodes.add(node);
+            if (nodeChildren.size()>0){
+                noChildImageView.setVisibility(View.GONE);
+                noChildTextView.setVisibility(View.GONE);
             }
-            adapter.notifyDataSetChanged();
+            refreshChildNodeList(nodeChildren);
         });
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -123,5 +133,22 @@ public class ChildNodesFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadNodes(idBluetooth);
+        viewModel.getListOfNodes(idBluetooth).observe(requireActivity(), nodeChildren -> {
+            refreshChildNodeList(nodeChildren);
+        });
+    }
+
+    private void refreshChildNodeList(List<NodeChild> nodeChildren){
+        this.listOfChildNodes.clear();
+        for (NodeChild node : nodeChildren){
+            this.listOfChildNodes.add(node);
+        }
+        adapter.notifyDataSetChanged();
     }
 }
