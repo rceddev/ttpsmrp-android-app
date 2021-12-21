@@ -74,5 +74,11 @@
     <string name="monitoring_unity_light">LUX</string>
     <string name="monitoring_unity_ph">Ph</string>
 
+    <!-- Validation message -->
+    <string name="validation_no_image">Selecciona una imagen de perfil</string>
+    <string name="validation_no_email">Correo electronico necesario</string>
+    <string name="validation_no_password">Contraseña vacia</string>
+    <string name="validation_passsword_not_equals">Las constraseñas no coinciden</string>
+    <string name="validation_no_username">Nombre de usuario vacio</string>
 
 </resources>
