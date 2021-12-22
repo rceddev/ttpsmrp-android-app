@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -26,10 +27,17 @@ public class ConfirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmation);
 
+        //Bundle extras
+        Bundle extras = getIntent().getExtras();
+        String userEmail = extras.getString("user_email");
+
         ConfirmationViewModel model = new ViewModelProvider(this).get(ConfirmationViewModel.class);
 
         this.confirmCodeTextInputLayout = findViewById(R.id.textInputLayout);
         this.confirmButtton = findViewById(R.id.confirm_code_button);
+
+        TextView hiddenEmail = findViewById(R.id.text_view_anonim_mail);
+        hiddenEmail.setText(hidePartEmail(userEmail));
 
         this.confirmButtton.setOnClickListener(v -> {
             ConfirmCodeRequest confirmCodeRequest = new ConfirmCodeRequest();
@@ -45,6 +53,10 @@ public class ConfirmationActivity extends AppCompatActivity {
             model.confirmCode(confirmCodeRequest).observe(ConfirmationActivity.this, tokenResponseObserver);
 
         });
+    }
+
+    private String hidePartEmail(String userEmail) {
+        return userEmail.substring(0,3) + "***" + userEmail.substring(userEmail.indexOf('@'), userEmail.length());
     }
 
     public void manageResponse(TokenResponse tokenResponse){
