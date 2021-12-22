@@ -94,8 +94,6 @@ public class SignIn extends AppCompatActivity {
         //Session
         this.session = new Session(this);
 
-        //TODO: add field validation
-
         imagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,6 +169,7 @@ public class SignIn extends AppCompatActivity {
         switch (defaultResponse.getCode()){
             case USER_REGISTERED:
                 Intent toConfirmationActivity = new Intent(SignIn.this, ConfirmationActivity.class);
+                toConfirmationActivity.putExtra("user_email", userEmail.getText().toString());
                 startActivity(toConfirmationActivity);
                 break;
             case USERNAME_REPEATED:

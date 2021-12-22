@@ -33,13 +33,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/text_view_anonim_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textSize="12sp"
+        android:text="NA"
         android:textColor="@color/teal_700"
-        android:text="rev***@gmail.com"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -58,7 +58,7 @@
         app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8">
+        app:layout_constraintTop_toBottomOf="@+id/text_view_anonim_mail">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"

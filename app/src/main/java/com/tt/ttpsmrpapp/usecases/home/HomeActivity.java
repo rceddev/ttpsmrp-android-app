@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MenuItem menuItem = menu.findItem(R.id.menu_item_profile);
         View view = menuItem.getActionView();
-        //Log.e("User", "url " + user.getUrl());
+
         //Set image view profile
         profile = view.findViewById(R.id.circle_image_view_profile);
 
