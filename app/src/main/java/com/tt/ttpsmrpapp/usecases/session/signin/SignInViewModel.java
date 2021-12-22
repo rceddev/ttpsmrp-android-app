@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.tt.ttpsmrpapp.data.UserRepository;
@@ -22,7 +23,7 @@ public class SignInViewModel extends AndroidViewModel {
         userRepository = new UserRepository(application);
     }
 
-    public MutableLiveData<DefaultResponse> registerUserRequest(String name, String email, String password, Uri userImage, Context context){
+    public LiveData<DefaultResponse> registerUserRequest(String name, String email, String password, Uri userImage, Context context){
         return userRepository.registerUserRequest(name,email,password,userImage, context);
     }
 

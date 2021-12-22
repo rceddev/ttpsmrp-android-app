@@ -108,21 +108,62 @@ public class SignIn extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                
+                //Validate fields
+                if( !passValidation() ){
+                    return;
+                }
+                
                 loadingDialog.startLoadingDialog();
 
-                final Observer<DefaultResponse> defaultResponseObserver = new Observer<DefaultResponse>() {
-                    @Override
-                    public void onChanged(DefaultResponse defaultResponse) {
+                model.registerUserRequest(userName.getText().toString(),
+                        userEmail.getText().toString(), userPass.getText().toString(), imageUri, SignIn.this)
+                    .observe(SignIn.this, defaultResponse -> {
                         loadingDialog.dismissDialog();
                         manageResponse(defaultResponse);
-                    }
-                };
-                model.registerUserRequest(userName.getText().toString(), userEmail.getText().toString(), userPass.getText().toString(), imageUri, SignIn.this)
-                    .observe(SignIn.this, defaultResponseObserver);
+                    });
             }
         });
 
+    }
+
+    private boolean passValidation() {
+        //validate image
+        if ( this.imageUri == null) {
+            Toast.makeText(this,
+                    getString(R.string.validation_no_image), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //validate user name
+        if (this.userName.getText().toString().equals("")){
+            Toast.makeText(this,
+                    getString(R.string.validation_no_username), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //validate email 
+        if( this.userEmail.getText().toString().equals("")) {
+            Toast.makeText(this,
+                    getString(R.string.validation_no_email), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //validate password
+        if (this.userPass.getText().toString().equals("") ||
+                this.userRepeatPass.getText().toString().equals("")) {
+            Toast.makeText(this,
+                    getString(R.string.validation_no_password), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!this.userPass.getText().toString()
+                .equals(this.userRepeatPass.getText().toString())){
+            Toast.makeText(this,
+                    getString(R.string.validation_passsword_not_equals), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 
