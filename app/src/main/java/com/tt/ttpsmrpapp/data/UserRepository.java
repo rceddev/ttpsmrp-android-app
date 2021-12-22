@@ -119,12 +119,16 @@ public class UserRepository {
 
         MutableLiveData<DefaultResponse> registerResponse = new MutableLiveData<>();
 
-        ApiService apiService = RetrofitInstance.getRetrofitInstance().create(ApiService.class);
-
         apiService.registerUser(email, pass, name, image).enqueue(new Callback<DefaultResponse>() {
             @Override
             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
-                registerResponse.setValue(response.body());
+                if (response.isSuccessful()){
+                    registerResponse.setValue(response.body());
+                }else {
+                    Gson gson = new Gson();
+                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+                    registerResponse.setValue(errorResponse);
+                }
             }
 
             @Override

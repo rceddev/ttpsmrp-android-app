@@ -117,8 +117,7 @@ public class SignIn extends AppCompatActivity {
                 loadingDialog.startLoadingDialog();
 
                 model.registerUserRequest(userName.getText().toString(),
-                        userEmail.getText().toString(), userPass.getText().toString(),
-                            imageUri, SignIn.this)
+                        userEmail.getText().toString(), userPass.getText().toString(), imageUri, SignIn.this)
                     .observe(SignIn.this, defaultResponse -> {
                         loadingDialog.dismissDialog();
                         manageResponse(defaultResponse);
