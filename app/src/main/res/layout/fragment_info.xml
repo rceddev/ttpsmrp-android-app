@@ -71,37 +71,40 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="190dp" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/roboto_light"
-        android:text="@string/info_label_description_es"
-        android:textColor="@color/login_highlight_font"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/text_view_info_desc"
-            android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/guideline6">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:justificationMode="inter_word"
-            android:fontFamily="@font/roboto_light"
-            android:text="NA" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/info_label_description_es"
+                android:textColor="@color/login_highlight_font"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/text_view_info_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_light"
+                android:justificationMode="inter_word"
+                android:text="NA" />
+        </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_refresh_monitoring"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android" >
+        android:layout_width="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -101,7 +101,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_marginBottom="24dp"
                             android:shadowColor="@color/text_shadow"
                             android:shadowDx="1"
                             android:shadowDy="1"
@@ -109,10 +108,98 @@
                             android:text="°C"
                             android:textColor="@color/light_font"
                             android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/text_view_temperature_state"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_temperature_state" />
+
+                        <LinearLayout
+                            android:id="@+id/linear_layout_desc_temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/text_view_temperature_value">
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraint_temp_desc"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/textView18"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="24dp"
+                                    android:layout_marginTop="16dp"
+                                    android:text="Pronóstico:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/text_view_temp_forecast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura minima esperada el día de hoy es de 10° con una maxima de 20°"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView18"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+                                <TextView
+                                    android:id="@+id/textView20"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Estado:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintTop_toBottomOf="@id/text_view_temp_forecast"
+                                    app:layout_constraintStart_toStartOf="@id/text_view_temp_forecast"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura esta por debajo de lo recomendado, necesita más calor"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView20"
+                                    app:layout_constraintTop_toBottomOf="@id/textView20" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_temp_see_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#bd0000"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linear_layout_desc_temp">
+
+                            <ImageView
+                                android:id="@+id/image_view_temp_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_baseline_expand_more_24" />
+
+                            <TextView
+                                android:id="@+id/text_view_temp_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ver más"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -201,7 +288,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_marginBottom="24dp"
                             android:shadowColor="@color/text_shadow"
                             android:shadowDx="1"
                             android:shadowDy="1"
@@ -209,9 +295,94 @@
                             android:text="%"
                             android:textColor="@color/light_font"
                             android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/text_view_humidity_state"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_humidity_state" />
+                        <LinearLayout
+                            android:id="@+id/linear_layout_desc_hum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/text_view_humidity_value">
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraint_hum_desc"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/textView19"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="24dp"
+                                    android:layout_marginTop="16dp"
+                                    android:text="Pronóstico:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/text_view_hum_forecast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura minima esperada el día de hoy es de 10° con una maxima de 20°"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView19"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+                                <TextView
+                                    android:id="@+id/textView21"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Estado:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintTop_toBottomOf="@id/text_view_hum_forecast"
+                                    app:layout_constraintStart_toStartOf="@id/text_view_hum_forecast"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura esta por debajo de lo recomendado, necesita más calor"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView21"
+                                    app:layout_constraintTop_toBottomOf="@id/textView21" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_hum_see_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#287ed1"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linear_layout_desc_hum">
+
+                            <ImageView
+                                android:id="@+id/image_view_hum_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_baseline_expand_more_24" />
+
+                            <TextView
+                                android:id="@+id/text_view_hum_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ver más"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -301,7 +472,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_marginBottom="24dp"
                             android:shadowColor="@color/text_shadow"
                             android:shadowDx="1"
                             android:shadowDy="1"
@@ -309,9 +479,95 @@
                             android:text="LUX"
                             android:textColor="@color/light_font"
                             android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/text_view_light_state"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_light_state" />
+
+                        <LinearLayout
+                            android:id="@+id/linear_layout_desc_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/text_view_light_value">
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraint_light_desc"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/textView22"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="24dp"
+                                    android:layout_marginTop="16dp"
+                                    android:text="Pronóstico:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/text_view_light_forecast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura minima esperada el día de hoy es de 10° con una maxima de 20°"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView22"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+                                <TextView
+                                    android:id="@+id/textView23"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Estado:"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintTop_toBottomOf="@id/text_view_light_forecast"
+                                    app:layout_constraintStart_toStartOf="@id/text_view_light_forecast"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="24dp"
+                                    android:text="La temperatura esta por debajo de lo recomendado, necesita más calor"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="@+id/textView23"
+                                    app:layout_constraintTop_toBottomOf="@id/textView23" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_light_see_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#d1aa28"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linear_layout_desc_light">
+
+                            <ImageView
+                                android:id="@+id/image_view_light_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/ic_baseline_expand_more_24" />
+
+                            <TextView
+                                android:id="@+id/text_view_light_expand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ver más"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 

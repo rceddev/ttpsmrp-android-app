@@ -61,6 +61,7 @@ public class NodeChildActivity extends AppCompatActivity {
 
         //Set ViewPager 2
         this.viewPager = findViewById(R.id.view_pager_2_node);
+        viewPager.setUserInputEnabled(false);
         viewPager.setAdapter(adapter);
 
         //Set bottom navigation view
