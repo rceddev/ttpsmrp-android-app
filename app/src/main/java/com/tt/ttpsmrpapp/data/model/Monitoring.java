@@ -9,7 +9,7 @@ public class Monitoring {
     private Double valueTemp;
     @SerializedName("valueHum")
     @Expose
-    private Integer valueHum;
+    private Double valueHum;
     @SerializedName("valueLight")
     @Expose
     private Double valueLight;
@@ -49,11 +49,11 @@ public class Monitoring {
         this.valueTemp = valueTemp;
     }
 
-    public Integer getValueHum() {
+    public Double getValueHum() {
         return valueHum;
     }
 
-    public void setValueHum(Integer valueHum) {
+    public void setValueHum(Double valueHum) {
         this.valueHum = valueHum;
     }
 

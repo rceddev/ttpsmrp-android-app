@@ -2,6 +2,7 @@ package com.tt.ttpsmrpapp.network.api;
 
 import com.tt.ttpsmrpapp.data.model.Measurement;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
+import com.tt.ttpsmrpapp.data.model.Monitoring;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.data.model.NodeChild;
 import com.tt.ttpsmrpapp.data.model.Plant;
@@ -50,7 +51,7 @@ public interface ApiService {
     Call<List<Plant>> getSupportedPlants();
     
     @POST("api/monitor/ultimaMedicion")
-    Call<Measurement> getLastMeasurement(@Body IdBluetooth idBluetoothObj);
+    Call<Monitoring> getLastMeasurement(@Body IdBluetooth idBluetoothObj);
 
     @GET("api/monitor/medicionesRange/{idBluetooth}/{range}")
     Call<List<MeasurementV2>> getMeasurementRange(@Path("idBluetooth") String idBluetooth, @Path("range") int range);

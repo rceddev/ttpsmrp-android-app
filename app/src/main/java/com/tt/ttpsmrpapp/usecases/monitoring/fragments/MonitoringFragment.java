@@ -60,11 +60,26 @@ public class MonitoringFragment extends Fragment {
     private ImageView lightExpandImageView;
     private ConstraintLayout descLightLayout;
 
+    //States textView
+    private TextView stateTemp;
+    private TextView stateHum;
+    private TextView stateLight;
+
+    //ForeCast textView
+    private TextView tempForecast;
+    private TextView humForecast;
+    private TextView lightForecast;
+
+    //State description
+    private TextView descStateTemp;
+    private TextView descStateHum;
+    private TextView descStateLight;
 
     //CardViews
     private CardView tempCardView;
     private CardView humCardView;
     private CardView lightCardView;
+
 
 
     //ViewModel
@@ -133,6 +148,18 @@ public class MonitoringFragment extends Fragment {
         this.lightExpandImageView = view.findViewById(R.id.image_view_light_expand);
         this.descLightLayout = view.findViewById(R.id.constraint_light_desc);
         this.lightCardView = view.findViewById(R.id.card_view_light);
+        //States
+        this.stateTemp = view.findViewById(R.id.text_view_temperature_state);
+        this.stateHum = view.findViewById(R.id.text_view_humidity_state);
+        this.stateLight = view.findViewById(R.id.text_view_light_state);
+        //Forecast
+        this.tempForecast = view.findViewById(R.id.text_view_temp_forecast);
+        this.humForecast = view.findViewById(R.id.text_view_hum_forecast);
+        this.lightForecast = view.findViewById(R.id.text_view_light_forecast);
+        //State descriṕtion
+        this.descStateTemp = view.findViewById(R.id.text_view_desc_state_temp);
+        this.descStateHum = view.findViewById(R.id.text_view_desc_state_hum);
+        this.descStateLight = view.findViewById(R.id.text_view_desc_state_light);
 
         //Listeners for see more event
         seeMoreLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -185,22 +212,27 @@ public class MonitoringFragment extends Fragment {
 
         viewModel.getLastMeasurement(idBluetoothObj).observe(requireActivity(), measurement -> {
             //Update UI
-            if (measurement.getTemperatura() != null){
-                temperatureValueTextView.setText(String.valueOf(measurement.getTemperatura()));
+            if (measurement.getValueTemp() != null){
+                temperatureValueTextView.setText(String.valueOf(measurement.getValueTemp()));
+                stateTemp.setText(measurement.getStateTemp());
+                tempForecast.setText(measurement.getForecastTemp());
+                descStateTemp.setText(measurement.getDescTemp());
             }
 
-            if (measurement.getHumedad() != null){
-                humidityValueTextView.setText(String.valueOf(measurement.getHumedad()));
+            if (measurement.getValueHum() != null){
+                humidityValueTextView.setText(String.valueOf(measurement.getValueHum()));
+                stateHum.setText(measurement.getStateHum());
+                humForecast.setText(measurement.getForecastHum());
+                descStateHum.setText(measurement.getDescHum());
             }
 
-            if (measurement.getLuz() != null){
-                lightValueTextView.setText(String.valueOf(measurement.getLuz()));
+            if (measurement.getValueLight() != null){
+                lightValueTextView.setText(String.valueOf(measurement.getValueLight()));
+                stateLight.setText(measurement.getStateLight());
+                lightForecast.setText(measurement.getForecastLight());
+                descStateLight.setText(measurement.getDescLight());
             }
 
-            if (measurement.getPh() != null){
-                phConstraintLayout.setVisibility(View.VISIBLE);
-                phValueTextView.setText(String.valueOf(measurement.getPh()));
-            }
             swipeRefreshLayout.setRefreshing(false);
         });
 

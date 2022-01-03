@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.tt.ttpsmrpapp.data.model.Measurement;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
+import com.tt.ttpsmrpapp.data.model.Monitoring;
 import com.tt.ttpsmrpapp.data.model.NodeCentral;
 import com.tt.ttpsmrpapp.data.model.NodeChild;
 import com.tt.ttpsmrpapp.data.model.Plant;
@@ -87,14 +88,14 @@ public class NodeRepository {
         return listOfSupportedPlant;
     }
 
-    public MutableLiveData<Measurement> getLastMeasurement( IdBluetooth idBluetoothObj){
+    public MutableLiveData<Monitoring> getLastMeasurement(IdBluetooth idBluetoothObj){
         //Mutable live data to accommodate las measurement from node
-        MutableLiveData<Measurement> lastMeasurement = new MutableLiveData<>();
+        MutableLiveData<Monitoring> lastMeasurement = new MutableLiveData<>();
 
         //API callback
-        apiService.getLastMeasurement(idBluetoothObj).enqueue(new Callback<Measurement>() {
+        apiService.getLastMeasurement(idBluetoothObj).enqueue(new Callback<Monitoring>() {
             @Override
-            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
+            public void onResponse(Call<Monitoring> call, Response<Monitoring> response) {
                 if (response.isSuccessful()) {
                     lastMeasurement.setValue(response.body());
                     Log.d("LMeasurementRequest", "Success");
@@ -108,7 +109,7 @@ public class NodeRepository {
             }
 
             @Override
-            public void onFailure(Call<Measurement> call, Throwable t) {
+            public void onFailure(Call<Monitoring> call, Throwable t) {
                 Log.e("RequestError", "LMeasurementRequest:" + t.getMessage());
             }
         });
