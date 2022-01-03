@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.tt.ttpsmrpapp.data.NodeRepository;
 import com.tt.ttpsmrpapp.data.model.Measurement;
 import com.tt.ttpsmrpapp.data.model.MeasurementV2;
+import com.tt.ttpsmrpapp.data.model.Monitoring;
 import com.tt.ttpsmrpapp.data.model.Plant;
 import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class NodeCentralViewModel extends AndroidViewModel {
 
     private NodeRepository repository;
-    private MutableLiveData<Measurement> lastMeasurement;
+    private MutableLiveData<Monitoring> lastMeasurement;
     private MutableLiveData<List<MeasurementV2>> lastMeasurementRange;
     private MutableLiveData<Plant> plant;
 
@@ -27,7 +28,7 @@ public class NodeCentralViewModel extends AndroidViewModel {
         this.repository = new NodeRepository(application);
     }
 
-    public LiveData<Measurement> getLastMeasurement (IdBluetooth idBluetoothObj) {
+    public LiveData<Monitoring> getLastMeasurement (IdBluetooth idBluetoothObj) {
         if (lastMeasurement == null) {
             lastMeasurement = new MutableLiveData<>();
             refreshLastMeasurement(idBluetoothObj);

@@ -2,14 +2,19 @@ package com.tt.ttpsmrpapp.usecases.monitoring.fragments;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tt.ttpsmrpapp.R;
@@ -42,6 +47,40 @@ public class MonitoringFragment extends Fragment {
     private TextView phValueTextView;
     private ConstraintLayout phConstraintLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout seeMoreLinearLayout;
+    private ConstraintLayout descTempLayout;
+    private ImageView tempExpandImageView;
+    private TextView tempExpandTextView;
+    private LinearLayout humExpandTLayout;
+    private TextView humExpandTextView;
+    private ImageView humExpandImageView;
+    private ConstraintLayout descHumLayout;
+    private LinearLayout lightExpandLayout;
+    private TextView lightExpandTextView;
+    private ImageView lightExpandImageView;
+    private ConstraintLayout descLightLayout;
+
+    //States textView
+    private TextView stateTemp;
+    private TextView stateHum;
+    private TextView stateLight;
+
+    //ForeCast textView
+    private TextView tempForecast;
+    private TextView humForecast;
+    private TextView lightForecast;
+
+    //State description
+    private TextView descStateTemp;
+    private TextView descStateHum;
+    private TextView descStateLight;
+
+    //CardViews
+    private CardView tempCardView;
+    private CardView humCardView;
+    private CardView lightCardView;
+
+
 
     //ViewModel
     private NodeCentralViewModel viewModel;
@@ -91,25 +130,109 @@ public class MonitoringFragment extends Fragment {
         this.phValueTextView = (TextView) view.findViewById(R.id.text_view_ph_value);
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_monitoring);
         this.phConstraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_card_ph);
+        //Temperature expand desc
+        this.seeMoreLinearLayout = (LinearLayout) view.findViewById(R.id.layout_temp_see_more);
+        this.descTempLayout = (ConstraintLayout) view.findViewById(R.id.constraint_temp_desc);
+        this.tempCardView = view.findViewById(R.id.card_view_temperature);
+        this.tempExpandImageView = view.findViewById(R.id.image_view_temp_expand);
+        this.tempExpandTextView = view.findViewById(R.id.text_view_temp_expand);
+        //Humidity expand desc
+        this.humExpandTLayout = view.findViewById(R.id.layout_hum_see_more);
+        this.humExpandTextView = view.findViewById(R.id.text_view_hum_expand);
+        this.humExpandImageView = view.findViewById(R.id.image_view_hum_expand);
+        this.descHumLayout = view.findViewById(R.id.constraint_hum_desc);
+        this.humCardView = view.findViewById(R.id.card_view_humidity);
+        //Light expand desc
+        this.lightExpandLayout = view.findViewById(R.id.layout_light_see_more);
+        this.lightExpandTextView = view.findViewById(R.id.text_view_light_expand);
+        this.lightExpandImageView = view.findViewById(R.id.image_view_light_expand);
+        this.descLightLayout = view.findViewById(R.id.constraint_light_desc);
+        this.lightCardView = view.findViewById(R.id.card_view_light);
+        //States
+        this.stateTemp = view.findViewById(R.id.text_view_temperature_state);
+        this.stateHum = view.findViewById(R.id.text_view_humidity_state);
+        this.stateLight = view.findViewById(R.id.text_view_light_state);
+        //Forecast
+        this.tempForecast = view.findViewById(R.id.text_view_temp_forecast);
+        this.humForecast = view.findViewById(R.id.text_view_hum_forecast);
+        this.lightForecast = view.findViewById(R.id.text_view_light_forecast);
+        //State descriṕtion
+        this.descStateTemp = view.findViewById(R.id.text_view_desc_state_temp);
+        this.descStateHum = view.findViewById(R.id.text_view_desc_state_hum);
+        this.descStateLight = view.findViewById(R.id.text_view_desc_state_light);
+
+        //Listeners for see more event
+        seeMoreLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //See more option is expanded
+                if(descTempLayout.getVisibility() == View.VISIBLE){
+                    descTempLayout.setVisibility(View.GONE);
+                    tempExpandImageView.setImageResource(R.drawable.ic_baseline_expand_more_24);
+                    tempExpandTextView.setText("Ver más");
+                }else{
+                    TransitionManager.beginDelayedTransition(tempCardView, new AutoTransition());
+                    descTempLayout.setVisibility(View.VISIBLE);
+                    tempExpandImageView.setImageResource(R.drawable.ic_baseline_expand_less_24);
+                    tempExpandTextView.setText("Ver menos");
+                }
+            }
+        });
+        humExpandTLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //See more option is expanded
+                if(descHumLayout.getVisibility() == View.VISIBLE){
+                    descHumLayout.setVisibility(View.GONE);
+                    humExpandImageView.setImageResource(R.drawable.ic_baseline_expand_more_24);
+                    humExpandTextView.setText("Ver más");
+                }else{
+                    TransitionManager.beginDelayedTransition(humCardView, new AutoTransition());
+                    descHumLayout.setVisibility(View.VISIBLE);
+                    humExpandImageView.setImageResource(R.drawable.ic_baseline_expand_less_24);
+                    humExpandTextView.setText("Ver menos");
+                }
+            }
+        });
+        lightExpandLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (descLightLayout.getVisibility() == View.VISIBLE){
+                    descLightLayout.setVisibility(View.GONE);
+                    lightExpandImageView.setImageResource(R.drawable.ic_baseline_expand_more_24);
+                }else{
+                    TransitionManager.beginDelayedTransition(lightCardView, new AutoTransition());
+                    descLightLayout.setVisibility(View.VISIBLE);
+                    lightExpandImageView.setImageResource(R.drawable.ic_baseline_expand_less_24);
+                    lightExpandTextView.setText("Ver menos");
+                }
+            }
+        });
+
 
         viewModel.getLastMeasurement(idBluetoothObj).observe(requireActivity(), measurement -> {
             //Update UI
-            if (measurement.getTemperatura() != null){
-                temperatureValueTextView.setText(String.valueOf(measurement.getTemperatura()));
+            if (measurement.getValueTemp() != null){
+                temperatureValueTextView.setText(String.valueOf(measurement.getValueTemp()));
+                stateTemp.setText(measurement.getStateTemp());
+                tempForecast.setText(measurement.getForecastTemp());
+                descStateTemp.setText(measurement.getDescTemp());
             }
 
-            if (measurement.getHumedad() != null){
-                humidityValueTextView.setText(String.valueOf(measurement.getHumedad()));
+            if (measurement.getValueHum() != null){
+                humidityValueTextView.setText(String.valueOf(measurement.getValueHum()));
+                stateHum.setText(measurement.getStateHum());
+                humForecast.setText(measurement.getForecastHum());
+                descStateHum.setText(measurement.getDescHum());
             }
 
-            if (measurement.getLuz() != null){
-                lightValueTextView.setText(String.valueOf(measurement.getLuz()));
+            if (measurement.getValueLight() != null){
+                lightValueTextView.setText(String.valueOf(measurement.getValueLight()));
+                stateLight.setText(measurement.getStateLight());
+                lightForecast.setText(measurement.getForecastLight());
+                descStateLight.setText(measurement.getDescLight());
             }
 
-            if (measurement.getPh() != null){
-                phConstraintLayout.setVisibility(View.VISIBLE);
-                phValueTextView.setText(String.valueOf(measurement.getPh()));
-            }
             swipeRefreshLayout.setRefreshing(false);
         });
 
