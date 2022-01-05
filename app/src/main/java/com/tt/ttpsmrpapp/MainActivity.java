@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra(ID_BLUETOOTH, extras.getString("idBluetooth"));
                     intent.putExtra(ID_PLANT, Integer.valueOf(extras.getString("idPlanta")));
                     startActivity(intent);
+                    finish();
                 } else {
                     //CASE NEVER SHOULD HAPPENED
                     Intent intent = new Intent(this, HomeActivity.class);
