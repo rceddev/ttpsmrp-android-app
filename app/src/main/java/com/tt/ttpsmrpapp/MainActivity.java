@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                             extras.getString("idPlanta")  != null &&
                                 extras.getString("node_type") != null){
                     Intent intent;
-                    if (extras.getString("note_Type").equals("0")){
+                    if (extras.getString("node_type").equals("0")){
                         intent = new Intent(this, NodeCentralActivity.class);
                         intent.putExtra(NODE_NAME, extras.getString("nombre"));
                     }else{
