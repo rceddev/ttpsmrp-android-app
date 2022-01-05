@@ -22,6 +22,7 @@ import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
 import com.tt.ttpsmrpapp.usecases.session.signin.SignIn;
 import com.tt.ttpsmrpapp.utils.LoadingDialog;
+import com.tt.ttpsmrpapp.utils.RegistrationToken;
 
 public class Login extends AppCompatActivity {
 
@@ -33,6 +34,7 @@ public class Login extends AppCompatActivity {
     private Button loginButton;
     private LoadingDialog loadingDialog;
     private LoginViewModel loginViewModel;
+    private RegistrationToken registrationToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class Login extends AppCompatActivity {
         this.session = new Session(this);
 
         this.loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        //Firebase registrationToken
+        this.registrationToken = new RegistrationToken();
 
         this.singIn = (TextView)findViewById(R.id.text_view_sing_in);
         this.singIn.setOnClickListener(new View.OnClickListener() {
@@ -62,19 +67,16 @@ public class Login extends AppCompatActivity {
         this.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginRequest loginRequest = new LoginRequest(email.getText().toString(), password.getText().toString());
+                LoginRequest loginRequest = new LoginRequest(email.getText().toString(),
+                        password.getText().toString(), registrationToken.getRegistrationToken());
 
                 loadingDialog.startLoadingDialog();
-
                 loginViewModel.makeLoginRequest(loginRequest).observe(Login.this, tokenResponse -> {
                     loadingDialog.dismissDialog();
                     manageResponse(tokenResponse);
                 });
             }
         });
-    }
-    private void showMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void manageResponse(TokenResponse tokenResponse) {

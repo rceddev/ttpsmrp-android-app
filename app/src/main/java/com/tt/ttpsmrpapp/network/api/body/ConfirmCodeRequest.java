@@ -8,6 +8,18 @@ public class ConfirmCodeRequest {
     @Expose
     private String code;
 
+    @SerializedName("tokenRegister")
+    @Expose
+    private String tokenRegister;
+
+    public String getTokenRegister() {
+        return tokenRegister;
+    }
+
+    public void setTokenRegister(String tokenRegister) {
+        this.tokenRegister = tokenRegister;
+    }
+
     public String getCode() {
         return code;
     }

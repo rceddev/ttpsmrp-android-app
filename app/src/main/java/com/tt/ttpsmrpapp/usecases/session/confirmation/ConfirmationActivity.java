@@ -16,12 +16,14 @@ import com.tt.ttpsmrpapp.R;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
+import com.tt.ttpsmrpapp.utils.RegistrationToken;
 
 import static com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode.*;
 public class ConfirmationActivity extends AppCompatActivity {
 
     private TextInputLayout confirmCodeTextInputLayout;
     private AppCompatButton confirmButtton;
+    private RegistrationToken registrationToken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         String userEmail = extras.getString("user_email");
 
+        //Registration token
+        registrationToken = new RegistrationToken();
         ConfirmationViewModel model = new ViewModelProvider(this).get(ConfirmationViewModel.class);
 
         this.confirmCodeTextInputLayout = findViewById(R.id.textInputLayout);
@@ -42,6 +46,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         this.confirmButtton.setOnClickListener(v -> {
             ConfirmCodeRequest confirmCodeRequest = new ConfirmCodeRequest();
             confirmCodeRequest.setCode(confirmCodeTextInputLayout.getEditText().getText().toString());
+            confirmCodeRequest.setTokenRegister(registrationToken.getRegistrationToken());
 
             final Observer<TokenResponse> tokenResponseObserver = new Observer<TokenResponse>() {
                 @Override
