@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 if (extras.getString("idBluetooth") != null &&
                         extras.getString("nombre") != null &&
                             extras.getString("idPlanta")  != null &&
-                                extras.getString("note_Type") != null){
+                                extras.getString("node_type") != null){
                     Intent intent;
                     if (extras.getString("note_Type").equals("0")){
                         intent = new Intent(this, NodeCentralActivity.class);
