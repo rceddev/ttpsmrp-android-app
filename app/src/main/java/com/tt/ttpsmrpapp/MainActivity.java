@@ -4,15 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.monitoring.NodeCentralActivity;
+import com.tt.ttpsmrpapp.usecases.monitoring.NodeChildActivity;
 import com.tt.ttpsmrpapp.usecases.session.login.Login;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
 
 public class MainActivity extends AppCompatActivity {
     Session session;
+
+    private static final String ID_BLUETOOTH = "ID_BLUETOOTH";
+    private static final String PLANT_NAME = "PLANT_NAME";
+    private static final String ID_PLANT = "ID_PLANT";
+    private static final String NODE_NAME = "NODE_NAME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +32,36 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            Bundle extras = getIntent().getExtras();
+            if (extras != null){
+                if (extras.getString("idBluetooth") != null &&
+                        extras.getString("nombre") != null &&
+                            extras.getString("idPlanta")  != null &&
+                                extras.getString("note_Type") != null){
+                    Intent intent;
+                    if (extras.getString("note_Type").equals("0")){
+                        intent = new Intent(this, NodeCentralActivity.class);
+                        intent.putExtra(NODE_NAME, extras.getString("nombre"));
+                    }else{
+                        intent = new Intent(this, NodeChildActivity.class);
+                        intent.putExtra(PLANT_NAME, extras.getString("nombre"));
+                    }
+                    intent.putExtra(ID_BLUETOOTH, extras.getString("idBluetooth"));
+                    intent.putExtra(ID_PLANT, String.valueOf(extras.getString("idPlanta")));
+                    startActivity(intent);
+                } else {
+                    //CASE NEVER SHOULD HAPPENED
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            } else {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
     }
 }
