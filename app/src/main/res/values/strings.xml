@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ttpsmrpapp</string>
+    <string name="app_name">Wignome</string>
 
     <!--Login screen ES-->
     <!-- Buttons-->
@@ -22,5 +22,63 @@
     <string name="hint_email_es">Correo electronico</string>
     <string name="hint_pass_es">Contraseña</string>
     <string name="hint_re_pass_es">Repetir contraseña</string>
+
+    <!--Confirmation screen ES-->
+    <string name="textview_confirm_code">Código de verificación</string>
+    <string name="hint_confirm_code">Código</string>
+    <string name="textview_confirm_code_descrition">Introduce el código de verificación \nque hemos enviado a</string>
+    <string name="button_confirm_code">Confirmar</string>
+
+    <!--Error codes -->
+    <string name="code_error_invalid">Código invalido</string>
+    <string name="code_error_empty">Código vacio</string>
+    <string name="code_error_unssuported_error">Error inesperado</string>
+
+    <!-- Bluetooth picker Fragment -->
+    <string name="bt_toolbar_title_es">Selecciona un dispositivo bluetooth</string>
+    <string name="bt_button_next_es">Siguiente</string>
+
+    <!-- Wi-fi picker Fragment -->
+    <string name="wifi_toolbar_title_es">Selecciona red Wi-Fi</string>
+
+    <!--Plant data Fragment-->
+    <string name="plant_data_fragment_toolbar_title_es">Selecciona informacion de la planta</string>
+    <string name="plant_data_fragment_textview_place_es">Selecciona el lugar de la planta</string>
+    <string name="plant_data_fragment_label_place_select_es">Lugar</string>
+    <string name="plant_data_fragment_textview_specie_es">Selecciona la especie de la planta</string>
+    <string name="plant_data_fragment_label_specie_select_es">Planta</string>
+    <string name="plant_data_fragment_button">Registrar nodo</string>
+
+    <!--Button navigation for monitorization ES-->
+    <string name="menu_item_bottom_navigation_monitoring_es">Monitorizar</string>
+    <string name="menu_item_bottom_navigation_plot_es">Registro</string>
+    <string name="menu_item_bottom_navigation_log_es">Bitacora</string>
+    <string name="menu_item_bottom_navigation_info_es">Informacion</string>
+    <!--Only for child node-->
+    <string name="menu_item_bottom_navigation_np_es">Hijos</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Monitoring labes -->
+    <string name="monitoring_label_temperature">Temperatura</string>
+    <string name="monitoring_label_humidity">Humedad</string>
+    <string name="monitoring_label_light">Luz</string>
+    <string name="monitoring_label_ph">Ph</string>
+    <string name="monitoring_label_date">Registrada el:</string>
+    <string name="info_label_description_es">Descripción</string>
+
+    <string name="monitoring_unity_temperature">°C</string>
+    <string name="monitoring_unity_humidity">%</string>
+    <string name="monitoring_unity_light">LUX</string>
+    <string name="monitoring_unity_ph">Ph</string>
+
+    <!-- Validation message -->
+    <string name="validation_no_image">Selecciona una imagen de perfil</string>
+    <string name="validation_no_email">Correo electronico necesario</string>
+    <string name="validation_no_password">Contraseña vacia</string>
+    <string name="validation_passsword_not_equals">Las constraseñas no coinciden</string>
+    <string name="validation_no_username">Nombre de usuario vacio</string>
 
 </resources>
