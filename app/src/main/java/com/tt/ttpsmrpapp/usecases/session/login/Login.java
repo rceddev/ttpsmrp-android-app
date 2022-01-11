@@ -20,6 +20,7 @@ import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.utils.ApiResponseCode;
 import com.tt.ttpsmrpapp.usecases.home.HomeActivity;
 import com.tt.ttpsmrpapp.usecases.session.management.Session;
+import com.tt.ttpsmrpapp.usecases.session.passwordrestauration.RestarPassActivity;
 import com.tt.ttpsmrpapp.usecases.session.signin.SignIn;
 import com.tt.ttpsmrpapp.utils.LoadingDialog;
 import com.tt.ttpsmrpapp.utils.RegistrationToken;
@@ -29,6 +30,7 @@ public class Login extends AppCompatActivity {
     private Session session;
 
     private TextView singIn;
+    private TextView restorePassword;
     private EditText email;
     private EditText password;
     private Button loginButton;
@@ -47,6 +49,15 @@ public class Login extends AppCompatActivity {
 
         //Firebase registrationToken
         this.registrationToken = new RegistrationToken();
+
+        this.restorePassword = findViewById(R.id.text_view_restore_password);
+        restorePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent singInIntent = new Intent(Login.this, RestarPassActivity.class);
+                startActivity(singInIntent);
+            }
+        });
 
         this.singIn = (TextView)findViewById(R.id.text_view_sing_in);
         this.singIn.setOnClickListener(new View.OnClickListener() {

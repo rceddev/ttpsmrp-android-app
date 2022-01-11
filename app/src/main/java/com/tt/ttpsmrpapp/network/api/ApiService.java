@@ -14,6 +14,8 @@ import com.tt.ttpsmrpapp.network.api.body.IdBluetooth;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeCRegisterRequest;
 import com.tt.ttpsmrpapp.network.api.body.NodeRegisterRequest;
+import com.tt.ttpsmrpapp.network.api.body.RestorePassEmail;
+import com.tt.ttpsmrpapp.network.api.body.RestorePassword;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
@@ -70,4 +72,10 @@ public interface ApiService {
 
     @GET("api/usuario/getDataUser")
     Call<User> getUserInfo(@Header("authorization") String token);
+
+    @POST("api/usuario/restaurar")
+    Call<DefaultResponse> confirmEmailToRestorePass(@Body RestorePassEmail email);
+
+    @POST("/api/usuario/validatePassword")
+    Call<DefaultResponse> restorePassword(@Body RestorePassword password);
 }
