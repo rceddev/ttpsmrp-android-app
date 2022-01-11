@@ -37,8 +37,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         registrationToken = new RegistrationToken();
         ConfirmationViewModel model = new ViewModelProvider(this).get(ConfirmationViewModel.class);
 
-        this.confirmCodeTextInputLayout = findViewById(R.id.textInputLayout);
-        this.confirmButtton = findViewById(R.id.confirm_code_button);
+        this.confirmCodeTextInputLayout = findViewById(R.id.textInputLayout22);
+        this.confirmButtton = findViewById(R.id.confirm_code_button_restore);
 
         TextView hiddenEmail = findViewById(R.id.text_view_anonim_mail);
         hiddenEmail.setText(hidePartEmail(userEmail));

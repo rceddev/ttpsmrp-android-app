@@ -20,6 +20,8 @@ import com.tt.ttpsmrpapp.network.api.ApiService;
 import com.tt.ttpsmrpapp.network.api.RetrofitInstance;
 import com.tt.ttpsmrpapp.network.api.body.ConfirmCodeRequest;
 import com.tt.ttpsmrpapp.network.api.body.LoginRequest;
+import com.tt.ttpsmrpapp.network.api.body.RestorePassEmail;
+import com.tt.ttpsmrpapp.network.api.body.RestorePassword;
 import com.tt.ttpsmrpapp.network.api.body.TokenResponse;
 import com.tt.ttpsmrpapp.network.api.body.DefaultResponse;
 
@@ -195,6 +197,57 @@ public class UserRepository {
 
     }
 
+    public MutableLiveData<DefaultResponse> confirmEmailToRestorePass(String email) {
+        MutableLiveData<DefaultResponse> confirmEmail = new MutableLiveData<>();
+        RestorePassEmail emailRequest = new RestorePassEmail(email);
+        apiService.confirmEmailToRestorePass(emailRequest).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                if (response.isSuccessful()){
+                    confirmEmail.setValue(response.body());
+                    Log.d("ConfirmEmail", "Email send");
+                }else{
+                    Gson gson = new Gson();
+                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+                    confirmEmail.setValue(errorResponse);
+                    Log.e("ConfirmEmail", "Email not send " + errorResponse.getCode());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.e("RequestError", "Error on confirm email to restore pass "+ t.getMessage());
+            }
+        });
+        return confirmEmail;
+    }
+
+    public MutableLiveData<DefaultResponse> restorePassword(String code, String password) {
+        MutableLiveData<DefaultResponse> restorePass = new MutableLiveData<>();
+        RestorePassword pass = new RestorePassword(code, password);
+        apiService.restorePassword(pass).enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                if (response.isSuccessful()) {
+                    restorePass.setValue(response.body());
+                    Log.d("ConfirmEmail", "Email send");
+                }else{
+                    Gson gson = new Gson();
+                    DefaultResponse errorResponse = gson.fromJson(response.errorBody().charStream(), DefaultResponse.class);
+                    restorePass.setValue(errorResponse);
+                    Log.e("ConfirmEmail", "Email not send " + errorResponse.getCode());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+                Log.e("RequestError", "Error restoring password "+ t.getMessage());
+            }
+        });
+
+        return  restorePass;
+    }
+
     private void setTokenResponseLive(TokenResponse tokenResponse){
         this.tokenResponseLiveData.setValue(tokenResponse);
     }
@@ -206,4 +259,7 @@ public class UserRepository {
     private void setTokenResponse(TokenResponse tokenResponse){
         this.tokenResponse = tokenResponse;
     }
+
+
+
 }
