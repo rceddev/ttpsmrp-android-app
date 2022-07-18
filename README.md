@@ -15,12 +15,13 @@ Teléfono: 57296000, extensión 52000.
 
 Warning
 
-This document contains information developed by the Higher School of 
-Computing of the National Polytechnic Institute, from data and documents with 
+This document contains information developed by the Escuela
+Superior de Cómputo from Instituto Politécnico Nacional, from data and documents with 
 property rights and therefore, its use will be restricted to applications that 
 are cleanly agreed upon.” The non-agreed application exempts the school from its 
 technical responsibility and gives rise to the legal consequences that are determined for 
 this purpose. Additional information on this technical report may be obtained at: The Academic Subdirectorate
-of the Higher School of Computing of the National Polytechnic Institute, located at
+of the Escuela Superior de Cómputo del Instituto Politécnico Nacional, located at Av. Juan de Dios Bátiz s/n
+Teléfono: 57296000, extensión 52000.
 
 ![image](https://user-images.githubusercontent.com/89185629/179432052-a5e258fd-b915-4664-b413-3416cb3fc495.png)
