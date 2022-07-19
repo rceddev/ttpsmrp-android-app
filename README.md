@@ -1,4 +1,12 @@
-# ttpsmrp-android-app
+## TT Prototipo de Sistema para Monitoreo Remoto de Plantas - Android App
+
+Aplicación movil Android para el proyecto de trabajo terminal: Prototipo de Sistema para Monitoreo Remoto de Plantas `2020-B031`. Desarrollada para tener acceso a funcionalidades como monitorización, configuración
+de nodos y la gestión del usuario  Este sistema es el encargado de englobar el funcionamiento del
+resto de módulos desarrollados para este proyecto. Los modulos que componen la aplicacion son:
+
+
+
+
 
 Advertencia
 
